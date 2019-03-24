@@ -14,6 +14,8 @@
       "Shift-Control-V" = "eval:paste_clipboard";
     };
     extraConfig = {
+      # needed for transparent background
+      depth = "32";
       # dark (transparent) background without eye-fucking blues.
       background = "[35]#000000";
       foreground = "White";
