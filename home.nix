@@ -58,8 +58,16 @@
       enable = true;
       config = ./xmonad/xmonad.hs;
     };
-    profileExtra = "${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources";
+    profileExtra = ''
+      # bootstrap configuration, force loading.
+      ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources
+      
+      # set background image.
+      ${pkgs.feh}/bin/feh --bg-fill ~/.bg.png
+      '';
   };
+
+  home.file.".bg.png".source = ./xmonad/bg.png;
 
   # used for wallpaper: feh
   programs.feh.enable = true;
