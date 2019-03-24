@@ -71,4 +71,11 @@
 
   # used for wallpaper: feh
   programs.feh.enable = true;
+
+  # transparent windows: compton
+  services.compton = {
+    enable = true;
+    blur = true;
+  };
+    
 }
