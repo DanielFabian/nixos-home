@@ -33,6 +33,11 @@
     pastebinit
   ];
 
+  home.keyboard = {
+    layout = "gb";
+    options = [ "eurosign:e" ];
+  };
+
   # git config
   programs.git = {
     enable = true;
@@ -53,5 +58,9 @@
       enable = true;
       config = ./xmonad/xmonad.hs;
     };
+    profileExtra = "${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources";
   };
+
+  # used for wallpaper: feh
+  programs.feh.enable = true;
 }
