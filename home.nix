@@ -33,6 +33,9 @@
 
     # uploading console output to pastebin
     pastebinit
+
+    # browser
+    firefox
   ];
 
   home.keyboard = {
@@ -70,6 +73,7 @@
   };
 
   home.file.".bg.png".source = ./xmonad/bg.png;
+  home.file.".xinitrc".text = "exec ~/.xsession";
 
   # used for wallpaper: feh
   programs.feh.enable = true;
