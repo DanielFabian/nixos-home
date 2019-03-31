@@ -13,12 +13,12 @@
   boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/6124006a-260f-4326-ba0c-fd92680a66ab";
+    { device = "/dev/disk/by-uuid/f05450f1-1b3a-4acc-a85b-95bed09aaa6f";
       fsType = "ext4";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/947d407f-9f2a-4c14-8317-c53f0e94e7b3"; }
+    [ { device = "/dev/disk/by-uuid/7ad3dd07-58b3-4bd3-8fef-ec37d45dc6d4"; }
     ];
 
   nix.maxJobs = lib.mkDefault 2;
