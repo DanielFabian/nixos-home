@@ -24,6 +24,15 @@
     };
   };
 
+  programs.vscode.extensions =
+    with pkgs.vscode-extensions;
+    [
+      # haskell
+      justusadam.language-haskell
+      # Nix
+      bbenoist.Nix
+    ];
+
   home.packages = with pkgs; [
     # fonts for terminal, etc.
     terminus_font
@@ -35,7 +44,7 @@
     pastebinit
 
     # browser
-    firefox
+    brave
   ];
 
   home.keyboard = {
