@@ -82,6 +82,11 @@
   services.compton = {
     enable = true;
     blur = true;
+    # fix sync issue with compton. This is probably an NVidia driver thing.
+    extraOptions = ''
+      xrender-sync = true;
+      xrender-sync-fence = true;
+      '';
   };
     
 }
