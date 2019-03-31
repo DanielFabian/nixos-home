@@ -57,23 +57,23 @@
   programs.vscode.enable = true;
 
   # control XSession from within home-manager:
-  xsession = {
-    enable = true;
-    windowManager.xmonad = {
-      enable = true;
-      config = ./xmonad/xmonad.hs;
-    };
-    profileExtra = ''
-      # bootstrap configuration, force loading.
-      ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources
-      
-      # set background image.
-      ${pkgs.feh}/bin/feh --bg-fill ~/.bg.png
-      '';
-  };
+#  xsession = {
+#    enable = true;
+#    windowManager.xmonad = {
+#      enable = true;
+#      config = ./xmonad/xmonad.hs;
+#    };
+#    profileExtra = ''
+#      # bootstrap configuration, force loading.
+#      ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources
+#      
+#      # set background image.
+#      ${pkgs.feh}/bin/feh --bg-fill ~/.bg.png
+#      '';
+#  };
 
-  home.file.".bg.png".source = ./xmonad/bg.png;
-  home.file.".xinitrc".text = "exec ~/.xsession";
+#  home.file.".bg.png".source = ./xmonad/bg.png;
+#  home.file.".xinitrc".text = "exec ~/.xsession";
 
   # used for wallpaper: feh
   programs.feh.enable = true;

@@ -81,9 +81,10 @@ with lib;
   services.xserver.libinput.enable = true;
 
   # Enable the KDE Desktop Environment.
-  services.xserver.displayManager.startx.enable = true;
-  services.xserver.desktopManager.default = "none";
-  services.xserver.desktopManager.xterm.enable = false;
+#  services.xserver.displayManager.startx.enable = true;
+#  services.xserver.desktopManager.default = "none";
+#  services.xserver.desktopManager.xterm.enable = false;
+  services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.windowManager.xmonad.enable = true;
 
   # supposedly cool shell: fish
