@@ -45,6 +45,19 @@
 
     # browser
     brave
+
+    # overview of performance
+    iotop
+
+    # launching programs from xmonad
+    dmenu
+
+    # timing processes
+    time
+
+    # screen shots
+    scrot
+    screenfetch
   ];
 
   home.keyboard = {
