@@ -43,9 +43,9 @@ with lib;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  #environment.systemPackages = with pkgs; [
-  #  wget pastebinit
-  #];
+  environment.systemPackages = with pkgs; [
+    virtmanager
+  ];
 
 #  environment.systemPackages = with pkgs; [ rxvt_unicode ];
 
@@ -95,7 +95,7 @@ with lib;
     description = "Daniel Fabian";
     home = "/home/dany";
     shell = pkgs.fish;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "libvirtd" ]; # Enable ‘sudo’ for the user.
   };
 
   # This value determines the NixOS release with which your system is to be
@@ -121,4 +121,7 @@ with lib;
 
   # Apply terminal fonts asap during boot.
   boot.earlyVconsoleSetup = true;
+
+  virtualisation.libvirtd.enable = true;
+  boot.kernel.sysctl = { "net.ipv4.ip_forward" = 1; };
 }
