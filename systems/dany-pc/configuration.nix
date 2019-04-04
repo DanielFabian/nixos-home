@@ -22,7 +22,7 @@ with lib;
       version = 2;
       device = "nodev";
       efiSupport = true;
-      #efiInstallAsRemovable = true;
+      gfxmodeEfi="3840x2160";
     };
   };
 
@@ -88,7 +88,7 @@ with lib;
   services.xserver.desktopManager.xterm.enable = false;
   services.xserver.windowManager.xmonad.enable = true;
 
-  #services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   # supposedly cool shell: fish
   programs.fish.enable = true;
