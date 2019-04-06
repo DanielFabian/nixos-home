@@ -16,7 +16,7 @@ with lib;
   boot.loader.grub.gfxmodeBios = "1280x800";
 
   # make the text-only terminal have good resolution
-  boot.loader.grub.gfxpayload = "keep";
+  boot.loader.grub.gfxpayloadBios = "keep";
 
   # boot.loader.grub.efiSupport = true;
   # boot.loader.grub.efiInstallAsRemovable = true;
@@ -76,6 +76,11 @@ with lib;
   services.xserver.enable = true;
   services.xserver.layout = "gb";
   services.xserver.xkbOptions = "eurosign:e";
+  
+  # backlight
+  services.xserver.extraDisplaySettings = ''
+    Option "RegistryDwords" "EnableBrightnessControl=1"
+    '';
 
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
