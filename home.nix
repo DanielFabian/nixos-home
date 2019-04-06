@@ -58,7 +58,34 @@
     # screen shots
     scrot
     screenfetch
+
+    # diffing tool
+    kdiff3
+
+    # git
+#    gitkraken
   ];
+
+  # IRC client
+  programs.irssi = {
+    enable = true;
+    networks = {
+      freenode = {
+        nick = "iceypoi";
+        server = {
+          address = "chat.freenode.net";
+          port = 6697;
+          autoConnect = true;
+        };
+        channels = {
+          nixos.autoJoin = true;
+          home-manager.autoJoin = true;
+          nixos-chat.autoJoin = false;
+          nix-lang.autoJoin = false;
+        };
+      };
+    };
+  };
 
   home.keyboard = {
     layout = "gb";
@@ -91,6 +118,9 @@
       
       # set background image.
       ${pkgs.feh}/bin/feh --bg-fill ~/.bg.png
+
+      # set numlock to on in x session.
+      ${pkgs.numlockx}/bin/numlockx
       '';
   };
 
@@ -109,6 +139,5 @@
       xrender-sync = true;
       xrender-sync-fence = true;
       '';
-  };
-    
+  };   
 }

@@ -8,6 +8,7 @@ with lib;
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      <home-manager/nixos>
     ];
 
   # Use the grub EFI boot loader.
@@ -22,7 +23,8 @@ with lib;
       version = 2;
       device = "nodev";
       efiSupport = true;
-      gfxmodeEfi="3840x2160";
+      gfxmodeEfi = "3840x2160";
+      useOSProber = true;
     };
   };
 
@@ -47,6 +49,7 @@ with lib;
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     virtmanager
+    home-manager
   ];
 
 #  environment.systemPackages = with pkgs; [ rxvt_unicode ];
@@ -102,6 +105,15 @@ with lib;
     extraGroups = [ "wheel" "libvirtd" ]; # Enable ‘sudo’ for the user.
   };
   
+  home-manager = {
+    users = {
+      root = import ../../home.nix;
+      dany = import ../../home.nix;
+    };
+    useUserPackages = true;
+  };
+
+
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
@@ -122,4 +134,13 @@ with lib;
 
   virtualisation.libvirtd.enable = true;
   boot.kernel.sysctl = { "net.ipv4.ip_forward" = 1; };
+
+  # numlock on boot in console mode
+  systemd.services."getty@" = {
+    description = "Keep numlock on in console mode";
+    serviceConfig = {
+      ExecStartPre="/bin/sh -c '${pkgs.kbd}/bin/setleds -D +num < /dev/%I'";
+    };
+  };
+
 }
