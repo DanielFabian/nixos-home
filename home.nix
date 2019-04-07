@@ -36,6 +36,7 @@
   home.packages = with pkgs; [
     # fonts for terminal, etc.
     terminus_font
+    terminus_font_ttf
 
     # downloading from the net
     wget
@@ -62,30 +63,13 @@
     # diffing tool
     kdiff3
 
+    # irc client
+    weechat
+
     # git
-#    gitkraken
+    gitkraken
   ];
 
-  # IRC client
-  programs.irssi = {
-    enable = true;
-    networks = {
-      freenode = {
-        nick = "iceypoi";
-        server = {
-          address = "chat.freenode.net";
-          port = 6697;
-          autoConnect = true;
-        };
-        channels = {
-          nixos.autoJoin = true;
-          home-manager.autoJoin = true;
-          nixos-chat.autoJoin = false;
-          nix-lang.autoJoin = false;
-        };
-      };
-    };
-  };
 
   home.keyboard = {
     layout = "gb";
@@ -120,8 +104,26 @@
       ${pkgs.feh}/bin/feh --bg-fill ~/.bg.png
 
       # set numlock to on in x session.
-      ${pkgs.numlockx}/bin/numlockx
+      #${pkgs.numlockx}/bin/numlockx
       '';
+  };
+
+  systemd.user.services.numlockx = {
+    Unit = {
+      Description = "Set numlock to on during X11 session";
+      After = [ "graphical-session-pre.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.numlockx}/bin/numlockx";
+      IOSchedulingClass = "idle";
+    };
+
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
   };
 
   home.file.".bg.png".source = ./xmonad/bg.png;

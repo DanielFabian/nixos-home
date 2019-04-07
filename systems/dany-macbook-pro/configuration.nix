@@ -10,21 +10,21 @@ with lib;
       ./hardware-configuration.nix
       ../../modules/internationalization.nix
       ../../modules/home-manager.nix
+      ../../modules/users.nix
+      ../../modules/fontconfig.nix
     ];
 
   # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  boot.loader.grub.gfxmodeBios = "1280x800";
+  boot.loader.grub = {
+    enable = true;
+    version = 2;
+    gfxmodeBios = "1280x800";
 
-  # make the text-only terminal have good resolution
-  boot.loader.grub.gfxpayloadBios = "keep";
+    # make the text-only terminal have good resolution
+    gfxpayloadBios = "keep";
 
-  # boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
-  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+    device = "/dev/sda"; # or "nodev" for efi only
+  };
 
   networking.hostName = "dany-macbook-pro"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -87,15 +87,6 @@ with lib;
   # supposedly cool shell: fish
   programs.fish.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.dany = {
-    isNormalUser = true;
-    description = "Daniel Fabian";
-    home = "/home/dany";
-    shell = pkgs.fish;
-    extraGroups = [ "wheel" "libvirtd" ]; # Enable ‘sudo’ for the user.
-  };
-    
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you

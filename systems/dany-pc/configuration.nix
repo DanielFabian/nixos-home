@@ -10,6 +10,8 @@ with lib;
       ./hardware-configuration.nix
       ../../modules/internationalization.nix
       ../../modules/home-manager.nix
+      ../../modules/users.nix
+      ../../modules/fontconfig.nix
     ];
 
   # Use the grub EFI boot loader.
@@ -44,7 +46,6 @@ with lib;
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     virtmanager
-    home-manager
   ];
 
 #  environment.systemPackages = with pkgs; [ rxvt_unicode ];
@@ -89,17 +90,6 @@ with lib;
   # supposedly cool shell: fish
   programs.fish.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.dany = {
-    isNormalUser = true;
-    description = "Daniel Fabian";
-    home = "/home/dany";
-    shell = pkgs.fish;
-    extraGroups = [ "wheel" "libvirtd" ]; # Enable ‘sudo’ for the user.
-  };
-
-
-
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
@@ -128,5 +118,4 @@ with lib;
       ExecStartPre="/bin/sh -c '${pkgs.kbd}/bin/setleds -D +num < /dev/%I'";
     };
   };
-
 }
