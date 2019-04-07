@@ -8,6 +8,8 @@ with lib;
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../modules/internationalization.nix
+      ../../modules/home-manager.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -30,13 +32,6 @@ with lib;
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
-  i18n = {
-    consoleFont = "Lat2-Terminus16";
-    consoleKeyMap = "uk";
-    defaultLocale = "en_US.UTF-8";
-  };
 
   # Set your time zone.
   time.timeZone = "Europe/London";
@@ -74,8 +69,6 @@ with lib;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.layout = "gb";
-  services.xserver.xkbOptions = "eurosign:e";
   
   # backlight
   services.xserver.extraDisplaySettings = ''
@@ -102,7 +95,7 @@ with lib;
     shell = pkgs.fish;
     extraGroups = [ "wheel" "libvirtd" ]; # Enable ‘sudo’ for the user.
   };
-
+    
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you

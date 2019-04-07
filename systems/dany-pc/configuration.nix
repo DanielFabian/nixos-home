@@ -8,7 +8,8 @@ with lib;
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      <home-manager/nixos>
+      ../../modules/internationalization.nix
+      ../../modules/home-manager.nix
     ];
 
   # Use the grub EFI boot loader.
@@ -35,12 +36,6 @@ with lib;
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Select internationalisation properties.
-  i18n = {
-    consoleFont = "Lat2-Terminus16";
-    consoleKeyMap = "uk";
-    defaultLocale = "en_GB.UTF-8";
-  };
 
   # Set your time zone.
   time.timeZone = "Europe/London";
@@ -76,11 +71,9 @@ with lib;
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
-
+ 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.layout = "gb";
-  services.xserver.xkbOptions = "eurosign:e";
 
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
@@ -104,14 +97,7 @@ with lib;
     shell = pkgs.fish;
     extraGroups = [ "wheel" "libvirtd" ]; # Enable ‘sudo’ for the user.
   };
-  
-  home-manager = {
-    users = {
-      root = import ../../home.nix;
-      dany = import ../../home.nix;
-    };
-    useUserPackages = true;
-  };
+
 
 
   # This value determines the NixOS release with which your system is to be
