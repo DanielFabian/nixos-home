@@ -108,24 +108,6 @@
       '';
   };
 
-  systemd.user.services.numlockx = {
-    Unit = {
-      Description = "Set numlock to on during X11 session";
-      After = [ "graphical-session-pre.target" ];
-      PartOf = [ "graphical-session.target" ];
-    };
-
-    Service = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.numlockx}/bin/numlockx";
-      IOSchedulingClass = "idle";
-    };
-
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
-  };
-
   home.file.".bg.png".source = ./xmonad/bg.png;
   home.file.".xinitrc".text = "exec ~/.xsession";
 

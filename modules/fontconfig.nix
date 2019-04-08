@@ -4,5 +4,6 @@
     defaultFonts = {
       monospace = [ "Terminus" "DejaVu Sans Mono" ];
     };
+    useEmbeddedBitmaps = true;
   };
 }

@@ -12,6 +12,7 @@ with lib;
       ../../modules/home-manager.nix
       ../../modules/users.nix
       ../../modules/fontconfig.nix
+      ../../modules/numlock.nix
     ];
 
   # Use the grub EFI boot loader.
@@ -111,11 +112,5 @@ with lib;
   virtualisation.libvirtd.enable = true;
   boot.kernel.sysctl = { "net.ipv4.ip_forward" = 1; };
 
-  # numlock on boot in console mode
-  systemd.services."getty@" = {
-    description = "Keep numlock on in console mode";
-    serviceConfig = {
-      ExecStartPre="/bin/sh -c '${pkgs.kbd}/bin/setleds -D +num < /dev/%I'";
-    };
-  };
+
 }
