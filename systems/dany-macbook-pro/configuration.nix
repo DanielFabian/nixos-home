@@ -82,7 +82,6 @@ with lib;
   services.xserver.displayManager.startx.enable = true;
   services.xserver.desktopManager.default = "none";
   services.xserver.desktopManager.xterm.enable = false;
-  services.xserver.windowManager.xmonad.enable = true;
 
   # supposedly cool shell: fish
   programs.fish.enable = true;

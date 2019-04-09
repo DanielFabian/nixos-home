@@ -53,6 +53,9 @@
     # launching programs from xmonad
     dmenu
 
+    # titlebar for xmonad
+    xmobar
+
     # timing processes
     time
 
@@ -94,6 +97,7 @@
     enable = true;
     windowManager.xmonad = {
       enable = true;
+      enableContribAndExtras = true;
       config = ./xmonad/xmonad.hs;
     };
     profileExtra = ''
@@ -102,14 +106,14 @@
       
       # set background image.
       ${pkgs.feh}/bin/feh --bg-fill ~/.bg.png
-
-      # set numlock to on in x session.
-      #${pkgs.numlockx}/bin/numlockx
       '';
   };
 
-  home.file.".bg.png".source = ./xmonad/bg.png;
-  home.file.".xinitrc".text = "exec ~/.xsession";
+  home.file = {
+    ".bg.png".source = ./xmonad/bg.png;
+    ".xinitrc".text = "exec ~/.xsession";
+    ".xmobarrc".source = ./xmonad/xmobarrc.hs;
+  };
 
   # used for wallpaper: feh
   programs.feh.enable = true;
