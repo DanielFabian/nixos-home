@@ -33,6 +33,11 @@
       bbenoist.Nix
     ];
 
+  programs.rofi = {
+    enable = true;
+    theme = "arthur";
+  };
+
   home.packages = with pkgs; [
     # fonts for terminal, etc.
     terminus_font
@@ -49,9 +54,6 @@
 
     # overview of performance
     iotop
-
-    # launching programs from xmonad
-    dmenu
 
     # titlebar for xmonad
     xmobar
