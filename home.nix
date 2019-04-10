@@ -115,11 +115,6 @@
     ".bg.png".source = ./xmonad/bg.png;
     ".xinitrc".text = "exec ~/.xsession";
     ".xmobarrc".source = ./xmonad/xmobarrc.hs;
-    ".config/networkmanager-dmenu/config.ini".text = ''
-      [dmenu]
-      dmenu_command = rofi
-      rofi_highlight = True
-    '';
   };
 
   # used for wallpaper: feh

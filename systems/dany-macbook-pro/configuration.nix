@@ -12,6 +12,7 @@ with lib;
       ../../modules/home-manager.nix
       ../../modules/users.nix
       ../../modules/fontconfig.nix
+      ../../modules/wifi.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -40,10 +41,6 @@ with lib;
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     virtmanager
-
-    # networkmanager for wifi
-    networkmanagerapplet
-    networkmanager_dmenu
   ];
 
 #  environment.systemPackages = with pkgs; [ rxvt_unicode ];
@@ -116,7 +113,4 @@ with lib;
 
   virtualisation.libvirtd.enable = true;
   boot.kernel.sysctl = { "net.ipv4.ip_forward" = 1; };
-
-  networking.networkmanager.enable = true;
-  services.gnome3.gnome-keyring.enable = true;
 }
