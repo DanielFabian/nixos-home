@@ -39,10 +39,6 @@
   };
 
   home.packages = with pkgs; [
-    # fonts for terminal, etc.
-    terminus_font
-    terminus_font_ttf
-
     # downloading from the net
     wget
 
@@ -55,15 +51,8 @@
     # overview of performance
     iotop
 
-    # titlebar for xmonad
-    xmobar
-
     # timing processes
     time
-
-    # screen shots
-    scrot
-    screenfetch
 
     # diffing tool
     kdiff3
@@ -74,7 +63,6 @@
     # git
     gitkraken
   ];
-
 
   home.keyboard = {
     layout = "gb";
@@ -93,41 +81,4 @@
 
   # ide: VS code
   programs.vscode.enable = true;
-
-  # control XSession from within home-manager:
-  xsession = {
-    enable = true;
-    windowManager.xmonad = {
-      enable = true;
-      enableContribAndExtras = true;
-      config = ./xmonad/xmonad.hs;
-    };
-    profileExtra = ''
-      # bootstrap configuration, force loading.
-      ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources
-      
-      # set background image.
-      ${pkgs.feh}/bin/feh --bg-fill ~/.bg.png
-      '';
-  };
-
-  home.file = {
-    ".bg.png".source = ./xmonad/bg.png;
-    ".xinitrc".text = "exec ~/.xsession";
-    ".xmobarrc".source = ./xmonad/xmobarrc.hs;
-  };
-
-  # used for wallpaper: feh
-  programs.feh.enable = true;
-
-  # transparent windows: compton
-  services.compton = {
-    enable = true;
-    blur = true;
-    # fix sync issue with compton. This is probably an NVidia driver thing.
-    extraOptions = ''
-      xrender-sync = true;
-      xrender-sync-fence = true;
-      '';
-  };   
 }

@@ -13,6 +13,7 @@ with lib;
       ../../modules/users.nix
       ../../modules/fontconfig.nix
       ../../modules/numlock.nix
+      ../../xmonad
     ];
 
   # Use the grub EFI boot loader.
@@ -79,11 +80,6 @@ with lib;
 
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
-
-  # Enable the KDE Desktop Environment.
-  services.xserver.displayManager.startx.enable = true;
-  services.xserver.desktopManager.default = "none";
-  services.xserver.desktopManager.xterm.enable = false;
 
   services.xserver.videoDrivers = [ "nvidia" ];
 

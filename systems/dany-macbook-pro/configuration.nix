@@ -12,6 +12,8 @@ with lib;
       ../../modules/home-manager.nix
       ../../modules/users.nix
       ../../modules/fontconfig.nix
+      ../../modules/numlock.nix
+      ../../xmonad
     ];
 
   # Use the GRUB 2 boot loader.
@@ -77,11 +79,6 @@ with lib;
 
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
-
-  # Enable the KDE Desktop Environment.
-  services.xserver.displayManager.startx.enable = true;
-  services.xserver.desktopManager.default = "none";
-  services.xserver.desktopManager.xterm.enable = false;
 
   # supposedly cool shell: fish
   programs.fish.enable = true;
