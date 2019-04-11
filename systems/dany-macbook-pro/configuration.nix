@@ -14,6 +14,7 @@ with lib;
       ../../modules/fontconfig.nix
       ../../modules/numlock.nix
       ../../xmonad
+      ../../modules/wifi.nix
     ];
 
   # Use the GRUB 2 boot loader.
