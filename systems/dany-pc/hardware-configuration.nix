@@ -22,6 +22,21 @@
       fsType = "vfat";
     };
 
+  fileSystems."/mnt/backup/home" =
+    { device = "backup/home";
+      fsType = "zfs";
+    };
+
+  fileSystems."/mnt/data" =
+    { device = "data/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/mnt/data/home" =
+    { device = "data/home";
+      fsType = "zfs";
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/038f3a56-a5ba-4a8c-a4ed-0ff06635e6ac"; }
     ];
