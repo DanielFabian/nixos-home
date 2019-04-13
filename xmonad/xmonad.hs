@@ -6,6 +6,7 @@ import XMonad.Util.Run
 import System.IO
 import XMonad.Actions.FloatKeys
 import XMonad.Util.EZConfig
+import XMonad.Layout.MultiColumns
 
 modKey = mod4Mask
 
@@ -18,13 +19,15 @@ myKeys =
     ] ++
     [("M-p", spawn "rofi -show run")]
 
+myLayouts = multiCol [2] 3 0.01 (-0.5) ||| layoutHook def
+
 main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ def {
      terminal = "urxvt"
      , modMask = mod4Mask
      , manageHook = manageDocks <+> manageHook def
-     , layoutHook = avoidStruts $ layoutHook def
+     , layoutHook = avoidStruts $ myLayouts
      , handleEventHook = handleEventHook def <+> docksEventHook
      , logHook = dynamicLogWithPP xmobarPP {
          ppOutput = hPutStrLn xmproc
