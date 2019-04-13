@@ -14,19 +14,16 @@ with lib;
       ../../modules/fontconfig.nix
       ../../modules/numlock.nix
       ../../xmonad
+      ./backup.nix
     ];
   
   boot.supportedFilesystems = [ "ntfs" "zfs" ];
-  
-  # needed for zfs
-  networking.hostId = "6d7416e5";
-  services.zfs.autoScrub.enable = true;
 
   fileSystems."/mnt/1TB-USB" = 
     { device = "/dev/disk/by-partlabel/1TB-USB";
       fsType = "ntfs";
     };
-
+ 
   # Use the grub EFI boot loader.
   boot.loader = {
     efi = {
