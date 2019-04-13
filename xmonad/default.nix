@@ -13,9 +13,15 @@ let hmConfig = {
     xsession = {
         enable = true;
         windowManager.xmonad = {
-        enable = true;
-        enableContribAndExtras = true;
-        config = ./xmonad.hs;
+            enable = true;
+            enableContribAndExtras = true;
+            config = ./xmonad.hs;
+        };
+        pointerCursor = {
+            package = pkgs.vanilla-dmz;
+            name = "Vanilla-DMZ-AA";
+            defaultCursor = "left_ptr";
+            size = 16;
         };
         profileExtra = ''
         # bootstrap configuration, force loading.
