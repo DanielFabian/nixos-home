@@ -62,6 +62,9 @@
 
     # git
     gitkraken
+
+    # text-based browser
+    lynx
   ];
 
   home.keyboard = {
