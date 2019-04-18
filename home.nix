@@ -92,4 +92,8 @@
     keyMode = "vi";
     customPaneNavigationAndResize = true;
   };
+
+  programs.neovim = {
+    enable = true;
+  };
 }
