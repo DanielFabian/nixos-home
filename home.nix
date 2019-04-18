@@ -84,4 +84,12 @@
 
   # ide: VS code
   programs.vscode.enable = true;
+
+  programs.tmux = {
+    enable = true;
+    clock24 = true;
+    historyLimit = 100000;
+    keyMode = "vi";
+    customPaneNavigationAndResize = true;
+  };
 }
