@@ -32,4 +32,6 @@
 
     # Apply terminal fonts asap during boot.
     boot.earlyVconsoleSetup = true;
+
+    services.printing.enable = true;
 }
