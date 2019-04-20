@@ -95,5 +95,12 @@
 
   programs.neovim = {
     enable = true;
+    configure = {
+      packages.myVimPackages = with pkgs.vimPlugins; {
+        start = [ vim-nix ];
+      };
+    };
+    viAlias = true;
+    vimAlias = true;
   };
 }

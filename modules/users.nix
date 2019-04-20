@@ -17,7 +17,13 @@
     };
 
     # supposedly cool shell: fish
-    programs.fish.enable = true;
+    programs.fish = {
+      enable = true;
+      shellInit = ''
+        fish_vi_key_bindings
+        fish_vi_cursor
+        '';
+    };
 
     # No password for sudo
     security.sudo.wheelNeedsPassword = false;
