@@ -9,7 +9,7 @@ let hmConfig = {
     package = pkgs.rxvt_unicode-with-plugins;
     keybindings = {
       # enable vi mode
-      Ctrl-Shift-P = "perl:keyboard-select:activate";
+      M-Escape = "perl:keyboard-select:activate";
     };
 
     extraConfig = {
