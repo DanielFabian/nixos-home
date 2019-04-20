@@ -4,26 +4,6 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   
-  # terminal emulator: rxvt-unicode
-  programs.urxvt = {
-    enable = true;
-    fonts = [ "xft:Terminus:pixelsize=16" ];
-    keybindings = {
-      # allow some copy/paste
-      "Shift-Control-C" = "eval:selection_to_clipboard";
-      "Shift-Control-V" = "eval:paste_clipboard";
-    };
-    extraConfig = {
-      # needed for transparent background
-      depth = "32";
-      # dark (transparent) background without eye-fucking blues.
-      background = "[35]#000000";
-      foreground = "White";
-      color4 = "RoyalBlue";
-      color12 = "RoyalBlue";
-    };
-  };
-
   programs.vscode.extensions =
     with pkgs.vscode-extensions;
     [
@@ -31,6 +11,8 @@
       justusadam.language-haskell
       # Nix
       bbenoist.Nix
+      # vim key bindings
+      vscodevim.vim
     ];
 
   programs.rofi = {
@@ -65,11 +47,26 @@
 
     # text-based browser
     lynx
+
+    # evenote-like thingie
+    nixnote2
+
+    # adobe
+    adobe-reader
+
+    # text-based mail client
+    mutt
   ];
 
   home.keyboard = {
     layout = "gb";
     options = [ "eurosign:e" ];
+  };
+
+  # firefox, sometimes needed
+  programs.firefox = {
+    enable = true;
+    enableAdobeFlash = true;
   };
 
   # git config

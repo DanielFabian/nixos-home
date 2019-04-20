@@ -8,6 +8,7 @@
       ./numlock.nix
       ./gc.nix
       ./virtualization.nix
+      ./urxvt.nix
       ../xmonad
     ];
 
