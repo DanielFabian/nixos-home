@@ -28,7 +28,7 @@
     pastebinit
 
     # browser
-    #brave
+    brave
 
     # overview of performance
     iotop
