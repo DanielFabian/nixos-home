@@ -10,11 +10,15 @@ let hmConfig = {
     keybindings = {
       # enable vi mode
       M-Escape = "perl:keyboard-select:activate";
+      Shift-Control-C = "eval:selection_to_clipboard";
+      Shift-Control-V = "eval:paste_clipboard";
     };
 
     extraConfig = {
       # enable the plugin for vi mode
       perl-ext-common = "...,keyboard-select";
+      # make sure, we copy to clipboard, too
+      "keyboard-select.clipboard" = "true";
       # needed for transparent background
       depth = "32";
       # dark (transparent) background without eye-fucking blues.
