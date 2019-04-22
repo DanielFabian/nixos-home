@@ -3,17 +3,6 @@
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-  
-  programs.vscode.extensions =
-    with pkgs.vscode-extensions;
-    [
-      # haskell
-      justusadam.language-haskell
-      # Nix
-      bbenoist.Nix
-      # vim key bindings
-      vscodevim.vim
-    ];
 
   programs.rofi = {
     enable = true;
@@ -80,7 +69,23 @@
   programs.htop.enable = true;
 
   # ide: VS code
-  programs.vscode.enable = true;
+  programs.vscode = {
+    enable = true;
+    userSettings = {
+      "editor.lineNumbers" = "relative";
+    };
+
+    extensions =
+      with pkgs.vscode-extensions;
+      [
+        # haskell
+        justusadam.language-haskell
+        # Nix
+        bbenoist.Nix
+        # vim key bindings
+        vscodevim.vim
+      ];
+  };
 
   programs.tmux = {
     enable = true;
@@ -93,6 +98,11 @@
   programs.neovim = {
     enable = true;
     configure = {
+      customRC = ''
+        set relativenumber
+        set ic
+        set hls is
+        '';
       packages.myVimPackages = with pkgs.vimPlugins; {
         start = [ vim-nix ];
       };
