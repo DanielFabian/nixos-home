@@ -1,4 +1,4 @@
-{...}:
+{pkgs, ...}:
 let hmConfig = {
   home.keyboard = {
     layout = "gb";
@@ -9,7 +9,7 @@ in
 {
   # Select internationalisation properties.
   i18n = {
-    consoleFont = "Lat2-Terminus16";
+    consoleFont = "${pkgs.powerline-fonts}/share/fonts/psf/ter-powerline-v16n.psf.gz";
     consoleUseXkbConfig = true;
     defaultLocale = "en_GB.UTF-8";
   };
