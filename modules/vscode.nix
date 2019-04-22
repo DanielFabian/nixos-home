@@ -1,5 +1,4 @@
-{pkgs, ...}:
-
+{pkgs, config, ...}:
 let hmConfig = {
   # ide: VS code
   programs.vscode = {
@@ -9,6 +8,10 @@ let hmConfig = {
       "keyboard.dispatch" = "keyCode";
       "vim.enableNeovim" = true;
       "vim.neovimPath" = "${pkgs.neovim}/bin/nvim";
+      "editor.fontFamily" =
+        builtins.concatStringsSep ", " 
+        (map (x: "'${x}'") config.fonts.fontconfig.defaultFonts.monospace);
+      "editor.fontSize" = 16;
     };
 
     extensions =

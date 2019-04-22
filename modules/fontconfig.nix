@@ -4,6 +4,7 @@ let hmConfig = {
     # fonts for terminal, etc.
     terminus_font
     terminus_font_ttf
+    powerline-fonts
   ];
 };
 in
@@ -16,7 +17,7 @@ in
   
   fonts.fontconfig = {
     defaultFonts = {
-      monospace = [ "Terminus" "DejaVu Sans Mono" ];
+      monospace = [ "Terminess Powerline" "Terminus" "DejaVu Sans Mono" ];
     };
     useEmbeddedBitmaps = true;
   };
