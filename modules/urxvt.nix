@@ -10,8 +10,6 @@ let hmConfig = {
     keybindings = {
       # enable vi mode
       M-Escape = "perl:keyboard-select:activate";
-      Shift-Control-C = "eval:selection_to_clipboard";
-      Shift-Control-V = "eval:paste_clipboard";
     };
 
     extraConfig = {
