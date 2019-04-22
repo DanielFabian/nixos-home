@@ -101,7 +101,6 @@
       customRC = ''
         set relativenumber
         set ic
-        set hls is
         '';
       packages.myVimPackages = with pkgs.vimPlugins; {
         start = [ vim-nix ];
