@@ -7,6 +7,8 @@ let hmConfig = {
     userSettings = {
       "editor.lineNumbers" = "relative";
       "keyboard.dispatch" = "keyCode";
+      "vim.enableNeovim" = true;
+      "vim.neovimPath" = "${pkgs.neovim}/bin/nvim";
     };
 
     extensions =
