@@ -9,6 +9,9 @@
       ./gc.nix
       ./virtualization.nix
       ./urxvt.nix
+      ./vscode.nix
+      ./neovim.nix
+      ./sshd.nix
       ../xmonad
     ];
 

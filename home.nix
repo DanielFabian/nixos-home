@@ -1,5 +1,4 @@
 { config, pkgs, ... }:
-
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -47,11 +46,6 @@
     mutt
   ];
 
-  home.keyboard = {
-    layout = "gb";
-    options = [ "eurosign:e" ];
-  };
-
   # firefox, sometimes needed
   programs.firefox = {
     enable = true;
@@ -68,45 +62,11 @@
   # process viewer: htop
   programs.htop.enable = true;
 
-  # ide: VS code
-  programs.vscode = {
-    enable = true;
-    userSettings = {
-      "editor.lineNumbers" = "relative";
-    };
-
-    extensions =
-      with pkgs.vscode-extensions;
-      [
-        # haskell
-        justusadam.language-haskell
-        # Nix
-        bbenoist.Nix
-        # vim key bindings
-        vscodevim.vim
-      ];
-  };
-
   programs.tmux = {
     enable = true;
     clock24 = true;
     historyLimit = 100000;
     keyMode = "vi";
     customPaneNavigationAndResize = true;
-  };
-
-  programs.neovim = {
-    enable = true;
-    configure = {
-      customRC = ''
-        set relativenumber
-        set ic
-        '';
-      packages.myVimPackages = with pkgs.vimPlugins; {
-        start = [ vim-nix ];
-      };
-    };
-    viAlias = true;
-    vimAlias = true;
   };
 }
