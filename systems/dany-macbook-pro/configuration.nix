@@ -10,7 +10,7 @@ with lib;
       ./hardware-configuration.nix
       ../../modules/shared.nix
       ../../modules/wifi.nix
-      ../../modules/dist-build.nix
+      ../../modules/dist-builds.nix
     ];
 
   # Use the GRUB 2 boot loader.

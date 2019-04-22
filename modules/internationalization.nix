@@ -1,3 +1,11 @@
+{...}:
+let hmConfig = {
+  home.keyboard = {
+    layout = "gb";
+    options = ["eurosign:e" "caps:swapescape" ];
+  };
+};
+in
 {
   # Select internationalisation properties.
   i18n = {
@@ -6,9 +14,15 @@
     defaultLocale = "en_GB.UTF-8";
   };
 
-  # Enable the X11 windowing system.
+  # needed for home manager to be happy
+  home-manager.users = {
+    dany = hmConfig;
+    root = hmConfig;
+  };
+
+  # make xkbConfig happy too
   services.xserver = {
-    layout = "gb";
-    xkbOptions = "eurosign:e, caps:swapescape";
+    layout = hmConfig.home.keyboard.layout;
+    xkbOptions = builtins.concatStringsSep ", " hmConfig.home.keyboard.options;
   };
 }
