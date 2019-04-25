@@ -7,7 +7,9 @@
         set relativenumber
         set ic
         let g:airline_theme='dark'
-        let g:airline_powerline_fonts = 1
+        if $TERM !~ 'linux'
+          let g:airline_powerline_fonts = 1
+        endif
         '';
       packages.myVimPackages = with pkgs.vimPlugins; {
         start = [ vim-nix vim-airline vim-airline-themes ];
