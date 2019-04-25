@@ -16,6 +16,7 @@
         };
     };
 
+    programs.fish.enable = true;
     # No password for sudo
     security.sudo.wheelNeedsPassword = false;
 }

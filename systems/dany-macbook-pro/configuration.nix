@@ -8,9 +8,9 @@ with lib;
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/shared.nix
-      ../../modules/wifi.nix
-      ../../modules/dist-builds.nix
+      ../../system-modules/shared.nix
+      ../../system-modules/wifi.nix
+      ../../system-modules/dist-builds.nix
     ];
 
   # Use the GRUB 2 boot loader.

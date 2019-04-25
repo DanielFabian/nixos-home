@@ -3,7 +3,7 @@
   # supposedly cool shell: fish
   programs.fish = {
     enable = true;
-    loginShellInit = ''
+    shellInit = ''
       fish_vi_key_bindings
       fish_vi_cursor
       '';

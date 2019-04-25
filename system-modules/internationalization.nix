@@ -4,7 +4,8 @@ in
 {
   # Select internationalisation properties.
   i18n = {
-    consoleFont = "${pkgs.powerline-fonts}/share/fonts/psf/ter-powerline-v16n.psf.gz";
+    # consoleFont = "${pkgs.powerline-fonts}/share/fonts/psf/ter-powerline-v16n.psf.gz";
+    consoleFont = "Lat2-Terminus16";
     consoleUseXkbConfig = true;
     defaultLocale = "en_GB.UTF-8";
   };

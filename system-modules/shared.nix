@@ -1,17 +1,17 @@
 {...}:
 {
     imports = [
-      ../system-modules/dist-builds.nix
-      ../system-modules/fontconfig.nix
-      ../system-modules/gc.nix
-      ../system-modules/home-manager.nix
-      ../system-modules/internationalization.nix
-      ../system-modules/numlock.nix
-      ../system-modules/shared.nix
-      ../system-modules/sshd.nix
-      ../system-modules/users.nix
-      ../system-modules/virtualization.nix
-      ../system-modules/wifi.nix
+      ./dist-builds.nix
+      ./fontconfig.nix
+      ./gc.nix
+      ./home-manager.nix
+      ./internationalization.nix
+      ./numlock.nix
+      ./shared.nix
+      ./sshd.nix
+      ./users.nix
+      ./virtualization.nix
+      ./wifi.nix
       ../xmonad
     ];
 
