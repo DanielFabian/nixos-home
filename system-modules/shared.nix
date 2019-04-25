@@ -1,17 +1,17 @@
 {...}:
 {
     imports = [
-      ./internationalization.nix
-      ./home-manager.nix
-      ./users.nix
-      ./fontconfig.nix
-      ./numlock.nix
-      ./gc.nix
-      ./virtualization.nix
-      ./urxvt.nix
-      ./vscode.nix
-      ./neovim.nix
-      ./sshd.nix
+      ../system-modules/dist-builds.nix
+      ../system-modules/fontconfig.nix
+      ../system-modules/gc.nix
+      ../system-modules/home-manager.nix
+      ../system-modules/internationalization.nix
+      ../system-modules/numlock.nix
+      ../system-modules/shared.nix
+      ../system-modules/sshd.nix
+      ../system-modules/users.nix
+      ../system-modules/virtualization.nix
+      ../system-modules/wifi.nix
       ../xmonad
     ];
 

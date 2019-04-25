@@ -1,10 +1,5 @@
-{pkgs, ...}:
-let hmConfig = {
-  home.keyboard = {
-    layout = "gb";
-    options = ["eurosign:e" "caps:swapescape" ];
-  };
-};
+{pkgs, config, ...}:
+let hmConfig = config.home-manager.users.dany;
 in
 {
   # Select internationalisation properties.
@@ -12,12 +7,6 @@ in
     consoleFont = "${pkgs.powerline-fonts}/share/fonts/psf/ter-powerline-v16n.psf.gz";
     consoleUseXkbConfig = true;
     defaultLocale = "en_GB.UTF-8";
-  };
-
-  # needed for home manager to be happy
-  home-manager.users = {
-    dany = hmConfig;
-    root = hmConfig;
   };
 
   # make xkbConfig happy too

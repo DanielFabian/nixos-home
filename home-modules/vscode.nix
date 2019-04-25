@@ -1,5 +1,5 @@
 {pkgs, config, ...}:
-let hmConfig = {
+{
   # ide: VS code
   programs.vscode = {
     enable = true;
@@ -8,9 +8,7 @@ let hmConfig = {
       "keyboard.dispatch" = "keyCode";
       "vim.enableNeovim" = true;
       "vim.neovimPath" = "${pkgs.neovim}/bin/nvim";
-      "editor.fontFamily" =
-        builtins.concatStringsSep ", " 
-        (map (x: "'${x}'") config.fonts.fontconfig.defaultFonts.monospace);
+      "editor.fontFamily" = "Terminus";
       "editor.fontSize" = 16;
     };
 
@@ -25,11 +23,4 @@ let hmConfig = {
         vscodevim.vim
       ];
   };
-};
-in
-{
-    home-manager.users = {
-        dany = hmConfig;
-        root = hmConfig;
-    };
 }

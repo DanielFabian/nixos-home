@@ -1,6 +1,13 @@
 { config, pkgs, ... }:
 {
-  # Let Home Manager install and manage itself.
+  imports = [
+      ./home-modules/fontconfig.nix
+      ./home-modules/internationalization.nix
+      ./home-modules/neovim.nix
+      ./home-modules/urxvt.nix
+      ./home-modules/vscode.nix
+    ];
+ # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
   programs.rofi = {

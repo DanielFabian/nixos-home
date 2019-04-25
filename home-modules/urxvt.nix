@@ -1,7 +1,5 @@
 { pkgs, ... }:
-
-let hmConfig = {
-
+{
   # terminal emulator: rxvt-unicode
   programs.urxvt = {
     enable = true;
@@ -26,12 +24,4 @@ let hmConfig = {
       color12 = "RoyalBlue";
     };
   };
-
-};
-in
-{
-    home-manager.users = {
-        dany = hmConfig;
-        root = hmConfig;
-    };
 }

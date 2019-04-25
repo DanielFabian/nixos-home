@@ -8,7 +8,7 @@ with lib;
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/shared.nix
+      ../../system-modules/shared.nix
       ./backup.nix
     ];
   

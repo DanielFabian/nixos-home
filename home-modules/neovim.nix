@@ -1,6 +1,5 @@
 {pkgs, ...}:
-let hmConfig = {
-
+{
   programs.neovim = {
     enable = true;
     configure = {
@@ -17,11 +16,4 @@ let hmConfig = {
     viAlias = true;
     vimAlias = true;
   };
-};
-in 
-{
-    home-manager.users = {
-        dany = hmConfig;
-        root = hmConfig;
-    };
 }
