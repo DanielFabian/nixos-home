@@ -3,7 +3,7 @@
   # terminal emulator: rxvt-unicode
   programs.urxvt = {
     enable = true;
-    fonts = [ "xft:Terminus:pixelsize=16, xft:Inconsolata\\ for\\ Powerline:pixelsize=16" ];
+    fonts = [ "xft:Terminess Powerline:pixelsize=16" ];
     package = pkgs.rxvt_unicode-with-plugins;
     keybindings = {
       # enable vi mode
