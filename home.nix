@@ -77,4 +77,8 @@
     keyMode = "vi";
     customPaneNavigationAndResize = true;
   };
+
+  home.sessionVariables = {
+    EDITOR = "vim";
+  };
 }
