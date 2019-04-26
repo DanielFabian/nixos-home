@@ -1,11 +1,11 @@
 {pkgs, fetchurl, ...}:
-let cfgName = "50-enable-terminess-powerline.conf";
-in
 {
+  fonts.fontconfig.enableProfileFonts = true;
+
   # this is needed to allow terminess powerline
-  xdg.configFile."fontconfig/conf.d/${cfgName}".text = ''
-<?xml version='1.0'?>
-<!DOCCTYPE fontconfig SYSTEM "fonts.dtd">
+  xdg.configFile."fontconfig/conf.d/50-enable-terminess-powerline.conf".text = ''
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
   <selectfont>
     <acceptfont>
@@ -15,7 +15,7 @@ in
     </acceptfont>
   </selectfont>
 </fontconfig>
-   ''; 
+  ''; 
 
   home.packages = with pkgs; [
     # fonts for terminal, etc.
