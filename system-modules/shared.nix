@@ -12,7 +12,7 @@
       ./users.nix
       ./virtualization.nix
       ./wifi.nix
-      ../xmonad
+      ./x11.nix
     ];
 
     # Set your time zone.

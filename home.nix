@@ -7,6 +7,7 @@
       ./home-modules/urxvt.nix
       ./home-modules/vscode.nix
       ./home-modules/fish.nix
+      ./xmonad
     ];
  # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
