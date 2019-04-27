@@ -1,14 +1,10 @@
 {pkgs, ...}:
 {
-  fonts = {
-    fontconfig = {
-      defaultFonts = {
-        monospace = [ "FuraCode Nerd Font" ];
-        sansSerif = [ "Overpass" ];
-      };
-      useEmbeddedBitmaps = true;
+  fonts.fontconfig = {
+    defaultFonts = {
+      monospace = [ "Terminus" "DejaVu Sans Mono" "TerminessTTF Nerd Font" ];
     };
-    fonts = with pkgs; [ overpass ];
+    useEmbeddedBitmaps = true;
   };
 
   i18n.consoleFont = "Lat2-Terminus16";

@@ -8,6 +8,7 @@
       "keyboard.dispatch" = "keyCode";
       "vim.enableNeovim" = true;
       "vim.neovimPath" = "${pkgs.neovim}/bin/nvim";
+      "editor.fontSize" = 16;
     };
 
     extensions =
