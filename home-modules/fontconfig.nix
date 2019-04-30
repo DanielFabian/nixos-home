@@ -2,7 +2,11 @@
 {
   fonts.fontconfig.enableProfileFonts = true;
   programs.urxvt.fonts = [ "xft:Terminess Powerline:pixelsize=16" "xft:TerminessTTF Nerd Font:pixelsize=16" "xft:Terminus:pixelsize=16" ];
-  programs.vscode.userSettings."editor.fontFamily" = "Terminess Powerline, Terminus, TerminessTTF Nerd Font";
+  programs.vscode.userSettings = {
+    "editor.fontFamily" = "FuraCode Nerd Font, Terminess Powerline, Terminus, TerminessTTF Nerd Font";
+    "editor.fontLigatures" = true;
+    "editor.fontSize" = 14;
+  };
 
   # this is needed to allow terminess powerline
   xdg.configFile."fontconfig/conf.d/50-enable-terminess-powerline.conf".text = ''
