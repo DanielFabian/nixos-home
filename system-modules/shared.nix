@@ -38,4 +38,9 @@
     boot.earlyVconsoleSetup = true;
 
     services.printing.enable = true;
+
+    networking.networkmanager = {
+      enable = true;
+      appendNameservers = [ "10.0.0.1" ];
+    };
 }
