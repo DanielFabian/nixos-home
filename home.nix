@@ -53,6 +53,9 @@
 
     # text-based mail client
     mutt
+
+    # Azure CLI
+    azure-cli
   ];
 
   # firefox, sometimes needed
