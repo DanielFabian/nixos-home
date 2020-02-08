@@ -33,6 +33,16 @@
       fsType = "zfs";
     };
 
+  fileSystems."/var/backup/system" =
+    { device = "backup/system";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/backup/data" =
+    { device = "backup/data";
+      fsType = "zfs";
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/39bf21f0-95d8-446b-b55f-d334730c1328"; }
       { device = "/dev/disk/by-uuid/7c32448d-6f2d-4938-ac2e-03acbf8d796d"; }
