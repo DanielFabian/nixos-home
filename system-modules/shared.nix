@@ -7,7 +7,6 @@
       ./home-manager.nix
       ./internationalization.nix
       ./numlock.nix
-      ./shared.nix
       ./sshd.nix
       ./users.nix
       ./virtualization.nix
