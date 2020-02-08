@@ -21,11 +21,6 @@ in
       evdev:input:b0003v1532p0203*
        KEYBOARD_KEY_70029=capslock
        KEYBOARD_KEY_70039=esc
-
-      # Apple MacBook Pro built-in keyboard
-      evdev:input:b0003v05ACp0237*
-       KEYBOARD_KEY_70029=capslock
-       KEYBOARD_KEY_70039=esc
       '';
     };
 }
