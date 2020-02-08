@@ -1,7 +1,7 @@
 {pkgs,...}:
 {
     imports = [
-      ./dist-builds.nix
+      #./dist-builds.nix # not using this for now
       ./fontconfig.nix
       ./gc.nix
       ./home-manager.nix

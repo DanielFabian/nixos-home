@@ -45,6 +45,7 @@
   services.compton = {
       enable = true;
       blur = true;
+      shadow = true;
       # fix sync issue with compton. This is probably an NVidia driver thing.
       # it looks like e.g. the terminal freezes, but it's just a re-draw problem.
       extraOptions = ''
