@@ -3,10 +3,8 @@ let hmConfig = config.home-manager.users.dany;
 in
 {
   # Select internationalisation properties.
-  i18n = {
-    consoleUseXkbConfig = true;
-    defaultLocale = "en_GB.UTF-8";
-  };
+  console.useXkbConfig = true;
+  i18n.defaultLocale = "en_GB.UTF-8";
 
   # make xkbConfig happy too
   services = {

@@ -33,7 +33,7 @@
     system.autoUpgrade.enable = true;
 
     # Apply terminal fonts asap during boot.
-    boot.earlyVconsoleSetup = true;
+    console.earlySetup = true;
 
     services.printing.enable = true;
 

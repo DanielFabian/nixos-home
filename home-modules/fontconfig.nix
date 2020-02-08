@@ -1,6 +1,6 @@
 {pkgs, fetchurl, ...}:
 {
-  fonts.fontconfig.enableProfileFonts = true;
+  fonts.fontconfig.enable = true;
   programs.urxvt.fonts = [ "xft:Terminess Powerline:pixelsize=16" "xft:TerminessTTF Nerd Font:pixelsize=16" "xft:Terminus:pixelsize=16" ];
   programs.vscode.userSettings = {
     "editor.fontFamily" = "FuraCode Nerd Font, Terminess Powerline, Terminus, TerminessTTF Nerd Font";
