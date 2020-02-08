@@ -1,4 +1,3 @@
- 
 import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
@@ -16,6 +15,8 @@ myKeys =
     ("M-p", spawn "rofi -show run"):
     ("M-e", spawn "brave"):
     ("M-c", spawn "code"):
+    ("M-C-h", sendMessage Shrink):
+    ("M-C-l", sendMessage Expand):
     ("M-j", sendMessage $ WN.Go WN.D):
     ("M-k", sendMessage $ WN.Go WN.U):
     ("M-h", sendMessage $ WN.Go WN.L):
