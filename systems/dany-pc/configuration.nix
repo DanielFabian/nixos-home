@@ -40,4 +40,8 @@ with lib;
   # should.
   system.stateVersion = "19.09"; # Did you read the comment?
 
+  nix.extraOptions = ''
+    secret-key-files = /root/.ssh/cache-priv-key.pem
+    '';
+
 }

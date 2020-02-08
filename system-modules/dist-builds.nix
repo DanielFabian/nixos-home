@@ -11,5 +11,9 @@
         system = "x86_64-linux";
       }
     ];
+    binaryCaches = [ "ssh-ng://dany-pc" ];
+    binaryCachePublicKeys = [
+      "dany-pc:p002xhY4CfoAkj/uWW4xgvBRXv61UTxyKM/Cwv6OloA="
+    ];
   };
 }
