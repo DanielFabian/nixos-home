@@ -19,7 +19,12 @@
 
     # Enable sound.
     sound.enable = true;
-    hardware.pulseaudio.enable = true;
+    hardware.pulseaudio = {
+      enable = true;
+      package = pkgs.pulseaudioFull;
+    };
+
+    hardware.bluetooth.enable = true;
 
     # globally allow unfree software, needed for drivers, etc.
     nixpkgs.config.allowUnfree = true;
