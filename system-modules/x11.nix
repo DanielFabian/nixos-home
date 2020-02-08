@@ -5,7 +5,6 @@
       enable = true;
       displayManager.startx.enable = true;
       desktopManager = {
-          default = "none";
           xterm.enable = false;
       };
   };
