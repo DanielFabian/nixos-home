@@ -19,6 +19,11 @@ in
       evdev:input:b0003v1532p0203*
        KEYBOARD_KEY_70029=capslock
        KEYBOARD_KEY_70039=esc
+      
+      # External Keyboard for Laptop
+      evdev:input:b0003v145Fp01E7*
+       KEYBOARD_KEY_70029=capslock
+       KEYBOARD_KEY_70039=esc
       '';
     };
 }

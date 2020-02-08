@@ -15,5 +15,6 @@
     binaryCachePublicKeys = [
       "dany-pc:p002xhY4CfoAkj/uWW4xgvBRXv61UTxyKM/Cwv6OloA="
     ];
+    trustedUsers = [ "root" "@wheel" ];
   };
 }
