@@ -9,21 +9,14 @@ with lib;
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../system-modules/shared.nix
-      ./backup.nix
+      #./backup.nix
     ];
-  
-  boot.supportedFilesystems = [ "ntfs" "zfs" ];
-
-  fileSystems."/mnt/1TB-USB" = 
-    { device = "/dev/disk/by-partlabel/1TB-USB";
-      fsType = "ntfs";
-    };
  
   # Use the grub EFI boot loader.
   boot.loader = {
     efi = {
       canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot/efi";
+      efiSysMountPoint = "/boot";
     };
  
     grub = {
@@ -37,6 +30,7 @@ with lib;
   };
 
   networking.hostName = "dany-pc"; # Define your hostname.
+  networking.hostId = "00ad07b0"; # needed for zfs.
 
   services.xserver.videoDrivers = [ "nvidia" ];
 

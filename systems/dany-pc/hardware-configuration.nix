@@ -11,34 +11,31 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  boot.supportedFilesystems = [ "zfs" ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/e3cc120b-6139-4326-a26c-e3610d96b0d6";
-      fsType = "ext4";
+    { device = "system";
+      fsType = "zfs";
     };
 
-  fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/5CF2-A1D6";
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/BAE6-45EF";
       fsType = "vfat";
     };
 
-  fileSystems."/mnt/backup/home" =
-    { device = "backup/home";
+  fileSystems."/var/data" =
+    { device = "data";
       fsType = "zfs";
     };
 
-  fileSystems."/mnt/data" =
-    { device = "data/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/mnt/data/home" =
-    { device = "data/home";
+  fileSystems."/var/backup" =
+    { device = "backup";
       fsType = "zfs";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/038f3a56-a5ba-4a8c-a4ed-0ff06635e6ac"; }
+    [ { device = "/dev/disk/by-uuid/39bf21f0-95d8-446b-b55f-d334730c1328"; }
+      { device = "/dev/disk/by-uuid/7c32448d-6f2d-4938-ac2e-03acbf8d796d"; }
     ];
 
   nix.maxJobs = lib.mkDefault 8;
