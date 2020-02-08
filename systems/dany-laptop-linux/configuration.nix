@@ -24,12 +24,13 @@
     efi.canTouchEfiVariables = true;
   };
 
-  services.xserver.videoDrivers = [ "intel" "nvidia" ];
-  hardware.nvidia.optimus_prime = {
-    enable = true;
-    intelBusId = "PCI:0:2:0";
-    nvidiaBusId = "PCI:3:0:0";
-  };
+#  services.xserver.videoDrivers = [ "intel" "nvidiaLegacy390" ];
+#  hardware.nvidia.optimus_prime = {
+#    enable = true;
+#    intelBusId = "PCI:0:2:0";
+#    nvidiaBusId = "PCI:3:0:0";
+#  };
+  hardware.bumblebee.enable = true;
 
   hardware.bluetooth.enable = true;
 
