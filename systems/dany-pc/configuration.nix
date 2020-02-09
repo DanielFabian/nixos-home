@@ -32,6 +32,9 @@ with lib;
   networking.hostName = "dany-pc"; # Define your hostname.
   networking.hostId = "00ad07b0"; # needed for zfs.
 
+  # for barrier
+  networking.firewall.allowedTCPPorts = [ 24800 ];
+
   services.xserver.videoDrivers = [ "nvidia" ];
 
   # This value determines the NixOS release with which your system is to be
@@ -42,6 +45,10 @@ with lib;
 
   nix.extraOptions = ''
     secret-key-files = /root/.ssh/cache-priv-key.pem
+    '';
+
+  services.xserver.screenSection = ''
+    Option "metamodes" "nvidia-auto-select +0+0 { ForceCompositionPipeline = On }"
     '';
 
 }
