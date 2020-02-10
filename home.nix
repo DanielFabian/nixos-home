@@ -17,6 +17,23 @@
     theme = "arthur";
   };
 
+  programs.chromium = {
+    enable = true;
+    extensions = [
+      # uBlock origin
+      "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+
+      # LastPass
+      "hdokiejnpimakedhajhdlcegeplioahd"
+
+      # Toby
+      "hddnkoipeenegfoeaoibdmnaalmgkpip"
+
+      # Vimium
+      "dbepggeogbaibhgnhhndojpepiihcmeb"
+    ];
+  };
+
   home.packages = with pkgs; [
     # downloading from the net
     wget
