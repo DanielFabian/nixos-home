@@ -73,6 +73,9 @@
 
     # Azure CLI
     azure-cli
+
+    # File manager
+    vifm
   ];
 
   # firefox, sometimes needed
