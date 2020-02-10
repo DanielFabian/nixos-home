@@ -14,7 +14,7 @@ modKey = mod4Mask
 
 myKeys =
     ("M-p", spawn "rofi -show run"):
-    ("M-e", spawn "brave"):
+    ("M-e", spawn "chromium"):
     ("M-c", spawn "code"):
     ("M-C-h", sendMessage Shrink):
     ("M-C-l", sendMessage Expand):

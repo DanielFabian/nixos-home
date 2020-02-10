@@ -76,6 +76,9 @@
 
     # File manager
     vifm
+
+    # Tool to get system info
+    neofetch
   ];
 
   # firefox, sometimes needed
