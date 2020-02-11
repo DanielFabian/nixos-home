@@ -11,4 +11,9 @@
 
   xdg.dataFile."fish/generated_completions/az.fish".source = 
       pkgs.runCommand "az.fish" {} "${pkgs.python38Packages.argcomplete}/bin/register-python-argcomplete --shell fish az > $out";
+
+  xdg.configFile."omf" = {
+      recursive = true;
+      source = ./omf;
+    };
 }
