@@ -47,6 +47,9 @@ with lib;
     secret-key-files = /root/.ssh/cache-priv-key.pem
     '';
 
+  # set disable webkit compositing mode so that vimb can work.
+  environment.variables.WEBKIT_DISABLE_COMPOSITING_MODE = "1";
+
   services.xserver.screenSection = ''
     Option "metamodes" "nvidia-auto-select +0+0 { ForceCompositionPipeline = On }"
     '';
