@@ -6,6 +6,14 @@
     settings = {
       background_opacity = 0.7;
       live_config_reload = true;
+
+      # fix minor powerline issues
+      font.offset.x = -1;
+      window.padding = {
+        x = 3;
+        y = 3;
+      };
+
       # Colors (Blood Moon)
       colors = {
         # Default colors

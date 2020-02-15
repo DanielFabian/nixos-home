@@ -42,7 +42,7 @@ myLayouts =
 main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ def {
-     terminal = "urxvt"
+     terminal = "alacritty"
      , modMask = mod4Mask
      , manageHook = manageDocks <+> manageHook def
      , layoutHook = avoidStruts $ WN.windowNavigation $ myLayouts
