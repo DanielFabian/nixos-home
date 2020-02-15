@@ -7,6 +7,7 @@
       ./home-modules/urxvt.nix
       ./home-modules/vscode.nix
       ./home-modules/fish
+      ./home-modules/alacritty
       ./xmonad
     ];
  # Let Home Manager install and manage itself.
