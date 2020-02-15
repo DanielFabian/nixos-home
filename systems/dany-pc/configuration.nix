@@ -54,4 +54,21 @@ with lib;
     Option "metamodes" "nvidia-auto-select +0+0 { ForceCompositionPipeline = On }"
     '';
 
+  systemd.user = {
+    timers.feh = {
+      enable = true;
+      description = "Schedule: Change wallpaper every minute";
+      timerConfig = { OnCalendar = "minutely"; Unit = "feh.service"; };
+      wantedBy = [ "timers.target" ];
+    };
+
+    services.feh = {
+      enable = true;
+      description = "Change wallpaper";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.feh}/bin/feh --bg-fill --randomize /var/data/Wallhaven-Downloader/wallhaven";
+      };
+    };
+  };
 }
