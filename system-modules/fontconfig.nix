@@ -2,7 +2,7 @@
 {
   fonts.fontconfig = {
     defaultFonts = {
-      monospace = [ "Terminus" "DejaVu Sans Mono" "TerminessTTF Nerd Font" ];
+      monospace = [ "CaskaydiaCove Nerd Font" ];
     };
     useEmbeddedBitmaps = true;
   };

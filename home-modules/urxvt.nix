@@ -4,6 +4,7 @@
   programs.urxvt = {
     enable = true;
     package = pkgs.rxvt_unicode-with-plugins;
+    fonts = [ "xft:CaskaydiaCove Nerd Font:pixelsize=14:minspace=False" "xft:DejaVu Sans:pixelsize=11" ];
     keybindings = {
       # enable vi mode
       M-Escape = "perl:keyboard-select:activate";
@@ -21,6 +22,7 @@
       foreground = "White";
       color4 = "RoyalBlue";
       color12 = "RoyalBlue";
+      letterSpace = "0";
     };
   };
 }
