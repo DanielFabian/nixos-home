@@ -16,7 +16,7 @@
         set expandtab
         '';
       packages.myVimPackages = with pkgs.vimPlugins; {
-        start = [ vim-nix vim-airline vim-airline-themes ];
+        start = [ vim-nix vim-airline vim-airline-themes vim-easymotion ];
       };
     };
     viAlias = true;
