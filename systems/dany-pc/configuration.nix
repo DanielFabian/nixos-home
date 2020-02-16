@@ -67,7 +67,7 @@ with lib;
       description = "Change wallpaper";
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkgs.feh}/bin/feh --bg-fill --randomize /var/data/Wallhaven-Downloader/wallhaven";
+        ExecStart = "${pkgs.feh}/bin/feh --bg-fill --randomize /var/data/wallpapers/pics";
       };
     };
   };
