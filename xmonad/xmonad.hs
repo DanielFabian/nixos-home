@@ -5,8 +5,10 @@ import XMonad.Util.Run
 import System.IO
 import XMonad.Actions.FloatKeys
 import XMonad.Util.EZConfig
+import XMonad.Layout.Fullscreen
 import XMonad.Layout.Spacing
 import XMonad.Layout.MultiColumns
+import XMonad.Layout.NoBorders
 import XMonad.Layout.GridVariants as GV
 import XMonad.Layout.WindowNavigation as WN
 
@@ -34,6 +36,7 @@ myKeys =
     ]
 
 myLayouts = 
+    smartBorders $
     spacingRaw True (Border 0 5 5 5) True (Border 5 5 5 5) True $
     GV.SplitGrid GV.L 2 1 (1/2) (4/3) (5/100)
     ||| multiCol [2] 3 0.01 (-0.5) 
@@ -41,7 +44,7 @@ myLayouts =
 
 main = do
   xmproc <- spawnPipe "xmobar"
-  xmonad $ def {
+  xmonad $ fullscreenSupport $ def {
      terminal = "alacritty"
      , modMask = mod4Mask
      , manageHook = manageDocks <+> manageHook def

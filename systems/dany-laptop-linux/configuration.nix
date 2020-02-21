@@ -49,5 +49,23 @@
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "19.09"; # Did you read the comment?
+
+  systemd.user = {
+    timers.feh = {
+      enable = true;
+      description = "Schedule: Change wallpaper every minute";
+      timerConfig = { OnCalendar = "minutely"; Unit = "feh.service"; };
+      wantedBy = [ "timers.target" ];
+    };
+
+    services.feh = {
+      enable = true;
+      description = "Change wallpaper";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.feh}/bin/feh --bg-fill --randomize /var/data/wallpapers/pics";
+      };
+    };
+  };
 }
 

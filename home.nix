@@ -80,12 +80,15 @@
 
     # Tool to get system info
     neofetch
+
+    # ultra-nerdy terminal
+    cool-retro-terminal
   ];
 
   # firefox, sometimes needed
   programs.firefox = {
     enable = true;
-    enableAdobeFlash = true;
+    enableAdobeFlash = false;
   };
 
   # git config
