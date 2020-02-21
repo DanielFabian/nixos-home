@@ -82,7 +82,7 @@
     neofetch
 
     # ultra-nerdy terminal
-    cool-retro-terminal
+    cool-retro-term
   ];
 
   # firefox, sometimes needed
