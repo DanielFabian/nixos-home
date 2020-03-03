@@ -13,15 +13,17 @@
 
   # Use the GRUB 2 boot loader.
   boot.loader = {
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot/efi";
+    };
+
     grub = {
       enable = true;
       version = 2;
-      device = "nodev"; 
+      device = "nodev";
       efiSupport = true;
-      efiInstallAsRemovable = false;
     };
-
-    efi.canTouchEfiVariables = true;
   };
 
 #  services.xserver.videoDrivers = [ "intel" "nvidiaLegacy390" ];
@@ -35,7 +37,8 @@
   hardware.bluetooth.enable = true;
 
   networking.hostName = "dany-laptop-linux"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.hostId = "8425e349"; # needed for zfs.
+  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config

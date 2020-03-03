@@ -8,23 +8,48 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/922b1b3a-3be1-44c1-91c5-701312fb19a5";
-      fsType = "ext4";
+    { device = "tank/nixos/root";
+      fsType = "zfs";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/9336-F95D";
+    { device = "boot";
+      fsType = "zfs";
+    };
+
+  fileSystems."/boot/efi" =
+    { device = "/dev/disk/by-uuid/2D08-2DB1";
       fsType = "vfat";
     };
 
+  fileSystems."/home" =
+    { device = "tank/nixos/home/home";
+      fsType = "zfs";
+    };
+
+  fileSystems."/root" =
+    { device = "tank/nixos/home/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var" =
+    { device = "tank/nixos/var";
+      fsType = "zfs";
+    };
+
+  fileSystems."/nix" =
+    { device = "tank/nix";
+      fsType = "zfs";
+    };
+
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/52b92bcd-7e78-4ebf-b6b0-2b323b839e89"; }
+    [ { device = "/dev/disk/by-uuid/af6d4641-67b3-47a9-a0cc-0d0c2fb122f1"; }
     ];
 
   nix.maxJobs = lib.mkDefault 4;
