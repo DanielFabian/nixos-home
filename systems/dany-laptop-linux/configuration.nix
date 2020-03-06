@@ -26,7 +26,7 @@
     };
   };
 
-#  services.xserver.videoDrivers = [ "intel" "nvidiaLegacy390" ];
+  services.xserver.videoDrivers = [ "intel" ];
 #  hardware.nvidia.optimus_prime = {
 #    enable = true;
 #    intelBusId = "PCI:0:2:0";
@@ -38,7 +38,7 @@
 
   networking.hostName = "dany-laptop-linux"; # Define your hostname.
   networking.hostId = "8425e349"; # needed for zfs.
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+#  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
