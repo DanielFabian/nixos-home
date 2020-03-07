@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
-
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -23,16 +22,29 @@
       version = 2;
       device = "nodev";
       efiSupport = true;
+      copyKernels = true;
     };
   };
 
-  services.xserver.videoDrivers = [ "intel" ];
-#  hardware.nvidia.optimus_prime = {
-#    enable = true;
-#    intelBusId = "PCI:0:2:0";
-#    nvidiaBusId = "PCI:3:0:0";
-#  };
-  hardware.bumblebee.enable = true;
+  services.zfs.autoScrub.enable = true;
+
+  services.xserver.videoDrivers = [ "nvidiaLegacy390" ];
+  powerManagement = {
+    enable = true;
+    cpuFreqGovernor = "ondemand";
+  };
+
+  hardware.nvidia.modesetting.enable = true;
+  hardware.nvidia.optimus_prime = {
+    enable = true;
+    intelBusId = "PCI:0:2:0";
+    nvidiaBusId = "PCI:3:0:0";
+  };
+
+  home-manager.users.dany.home.file.".xinitrc".text = ''
+    xrandr --setprovideroutputsource modesetting NVIDIA-0
+    xrandr --auto
+  '';
 
   hardware.bluetooth.enable = true;
 

@@ -83,6 +83,12 @@
 
     # ultra-nerdy terminal
     cool-retro-term
+
+    # lspci
+    pciutils
+
+    # glxinfo and glxgears
+    glxinfo
   ];
 
   # firefox, sometimes needed

@@ -8,7 +8,7 @@
             home = "/home/dany";
             shell = pkgs.fish;
             # Enable ‘sudo’ for the user.
-            extraGroups = [ "wheel" ];
+            extraGroups = [ "wheel" "video" "audio" ];
         };
 
         root = {
