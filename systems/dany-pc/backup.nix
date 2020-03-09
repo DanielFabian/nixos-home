@@ -18,6 +18,7 @@ let
   services.znapzend = 
   {
     enable = true;
+    pure = true;
     zetup = {
       "system/nixos" = backup "system/nixos";
       "data" = backup "data";

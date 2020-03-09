@@ -59,16 +59,21 @@
     };
 
   fileSystems."/var/backup/system/nixos" =
-    { device = "backup/system/nixos/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/var/backup/system/nixos/home" =
-    { device = "backup/system/nixos/home/home";
+    { device = "backup/system/nixos";
       fsType = "zfs";
     };
 
   fileSystems."/var/backup/system/nixos/root" =
+    { device = "backup/system/nixos/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/backup/system/nixos/home/home" =
+    { device = "backup/system/nixos/home/home";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/backup/system/nixos/home/root" =
     { device = "backup/system/nixos/home/root";
       fsType = "zfs";
     };
