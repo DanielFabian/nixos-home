@@ -4,6 +4,7 @@ let
   longTermSnapshots = tempSnapshots + "," + "30d=>4h,90d=>1d,1y=>1w,10y=>1m"; 
   backup = dataset: {
       plan = tempSnapshots;
+      recursive = true;
       destinations.local = {
         dataset = "backup/${dataset}";
         plan = longTermSnapshots;
