@@ -18,7 +18,7 @@ let
   {
     enable = true;
     zetup = {
-      "system" = backup "system";
+      "system/nixos" = backup "system/nixos";
       "data" = backup "data";
     };
   };

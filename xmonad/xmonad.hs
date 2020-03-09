@@ -38,9 +38,9 @@ myKeys =
 myLayouts = 
     smartBorders $
     spacingRaw True (Border 0 5 5 5) True (Border 5 5 5 5) True $
-    GV.SplitGrid GV.L 2 1 (1/2) (4/3) (5/100)
+    layoutHook def
     ||| multiCol [2] 3 0.01 (-0.5) 
-    ||| layoutHook def
+    ||| GV.SplitGrid GV.L 2 1 (1/2) (4/3) (5/100)
 
 main = do
   xmproc <- spawnPipe "xmobar"

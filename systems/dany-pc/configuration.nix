@@ -9,7 +9,7 @@ with lib;
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../system-modules/shared.nix
-      ./backup.nix
+      #./backup.nix
     ];
  
   # Use the grub EFI boot loader.

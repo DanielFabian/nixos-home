@@ -14,7 +14,27 @@
   boot.supportedFilesystems = [ "zfs" ];
 
   fileSystems."/" =
-    { device = "system";
+    { device = "system/nixos/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home" =
+    { device = "system/nixos/home/home";
+      fsType = "zfs";
+    };
+
+  fileSystems."/root" =
+    { device = "system/nixos/home/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var" =
+    { device = "system/nixos/var";
+      fsType = "zfs";
+    };
+
+  fileSystems."/nix" =
+    { device = "system/nix";
       fsType = "zfs";
     };
 
@@ -35,6 +55,26 @@
 
   fileSystems."/var/backup/system" =
     { device = "backup/system";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/backup/system/nixos" =
+    { device = "backup/system/nixos/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/backup/system/nixos/home" =
+    { device = "backup/system/nixos/home/home";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/backup/system/nixos/root" =
+    { device = "backup/system/nixos/home/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/backup/system/nixos/var" =
+    { device = "backup/system/nixos/var";
       fsType = "zfs";
     };
 
