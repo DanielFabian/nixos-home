@@ -43,6 +43,11 @@
       fsType = "zfs";
     };
 
+  fileSystems."/var/data" =
+    { device = "tank/nixos/home/data";
+      fsType = "zfs";
+    };
+
   fileSystems."/nix" =
     { device = "tank/nix";
       fsType = "zfs";

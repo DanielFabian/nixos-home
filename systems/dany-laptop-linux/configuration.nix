@@ -3,11 +3,17 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
+let xinitrcExt = ''
+    xrandr --setprovideroutputsource modesetting NVIDIA-0
+    xrandr --auto
+  '';
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../system-modules/shared.nix
+      ./backup.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -41,11 +47,8 @@
     nvidiaBusId = "PCI:3:0:0";
   };
 
-  home-manager.users.dany.home.file.".xinitrc".text = ''
-    xrandr --setprovideroutputsource modesetting NVIDIA-0
-    xrandr --auto
-  '';
-
+  home-manager.users.dany.home.file.".xinitrc".text = xinitrcExt;
+  home-manager.users.root.home.file.".xinitrc".text = xinitrcExt;
   hardware.bluetooth.enable = true;
 
   networking.hostName = "dany-laptop-linux"; # Define your hostname.
