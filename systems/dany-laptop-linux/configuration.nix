@@ -84,6 +84,17 @@ in
         ExecStart = "${pkgs.feh}/bin/feh --bg-fill --randomize /var/data/wallpapers/pics";
       };
     };
+
+    services.barrierc = {
+      enable = true;
+      description = "KVM for remote controlling the laptop from the Desktop";
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.barrier}/bin/barrierc -f --enable-crypto dany-pc.gamingcave";
+      };
+      partOf = [ "graphical-session.target" ];
+      wantedBy = [ "graphical-session.target" ];
+    };
   };
 }
 
