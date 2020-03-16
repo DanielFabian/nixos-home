@@ -29,6 +29,9 @@ with lib;
     };
   };
 
+
+  hardware.opengl.enable = true;
+  hardware.opengl.driSupport32Bit = true;
   networking.hostName = "dany-pc"; # Define your hostname.
   networking.hostId = "00ad07b0"; # needed for zfs.
 
