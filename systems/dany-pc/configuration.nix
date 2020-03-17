@@ -3,6 +3,16 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, lib, ... }:
+let evanjs_polychromatic = import (builtins.fetchGit {
+  # Descriptive name to make the store path easier to identify
+  name = "evanjs_polychromatic";
+  url = https://github.com/evanjs/nixpkgs;
+  # Commit hash for nixos-unstable as of 2018-09-12
+  # `git ls-remote https://github.com/nixos/nixpkgs-channels nixos-unstable`
+  ref = "refs/heads/polychromatic/init";
+  rev = "e738e50000050aca7d84dde1335dedd452359acb";
+}) {};
+in
 with lib;
 {
   imports =
@@ -11,6 +21,8 @@ with lib;
       ../../system-modules/shared.nix
       ./backup.nix
     ];
+
+  environment.systemPackages = [ evanjs_polychromatic.polychromatic ];
  
   # Use the grub EFI boot loader.
   boot.loader = {
@@ -29,6 +41,7 @@ with lib;
     };
   };
 
+  hardware.openrazer.enable = true;
 
   hardware.opengl.enable = true;
   hardware.opengl.driSupport32Bit = true;
