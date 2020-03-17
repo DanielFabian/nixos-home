@@ -73,5 +73,16 @@ with lib;
         ExecStart = "${pkgs.feh}/bin/feh --bg-fill --randomize /var/data/wallpapers/pics";
       };
     };
+
+    services.barriers = {
+      enable = true;
+      description = "KVM for remote controlling the laptop from the Desktop";
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.barrier}/bin/barriers -f --enable-crypto -c ${./barrier.conf}";
+      };
+      partOf = [ "graphical-session.target" ];
+      wantedBy = [ "graphical-session.target" ];
+    };
   };
 }
