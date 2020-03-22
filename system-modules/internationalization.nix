@@ -24,6 +24,11 @@ in
       evdev:input:b0003v145Fp01E7*
        KEYBOARD_KEY_70029=capslock
        KEYBOARD_KEY_70039=esc
+
+      # Corsair CORSAIR K70 RGB MK.2 Mechanical Gaming Keyboard
+      evdev:input:b0003v1B1Cp1B49*
+       KEYBOARD_KEY_70029=capslock
+       KEYBOARD_KEY_70039=esc
       '';
     };
 }
