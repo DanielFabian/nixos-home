@@ -32,17 +32,15 @@
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, disko, lanzaboote, hyprland, ... }@inputs:
   let
-    system = "x86_64-linux";
-    
     # Unstable overlay for rolling apps
     unstableOverlay = final: prev: {
-      unstable = nixpkgs-unstable.legacyPackages.${system};
+      unstable = nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system};
     };
   in
   {
     nixosConfigurations = {
       zbook = nixpkgs.lib.nixosSystem {
-        inherit system;
+        system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
           # Declarative disk layout

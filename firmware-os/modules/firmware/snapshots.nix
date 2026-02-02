@@ -50,6 +50,28 @@
         weekly = 0;
         monthly = 0;
       };
+
+      # VMs - aggressive retention (your differential disks live here!)
+      "rpool/local/vms" = {
+        autosnap = true;
+        autoprune = true;
+        frequently = 12;   # every 15 min, keep 12 (3 hours)
+        hourly = 48;       # 2 days - enough to recover from bad VM states
+        daily = 14;
+        weekly = 4;
+        monthly = 0;
+      };
+
+      # Docker - light retention (layers are repullable, but local state isn't)
+      "rpool/local/docker" = {
+        autosnap = true;
+        autoprune = true;
+        frequently = 4;    # 1 hour of "oh shit"
+        hourly = 12;
+        daily = 7;
+        weekly = 0;
+        monthly = 0;
+      };
     };
   };
 

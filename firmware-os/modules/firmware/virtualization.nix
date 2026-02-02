@@ -20,10 +20,7 @@
       package = pkgs.qemu_kvm;
       runAsRoot = true;
       swtpm.enable = true;  # TPM emulation for Windows VMs
-      ovmf = {
-        enable = true;
-        packages = [ pkgs.OVMFFull.fd ];
-      };
+      # OVMF is now available by default, no explicit config needed
     };
   };
 

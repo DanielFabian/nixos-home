@@ -37,8 +37,9 @@
     # systemd.tpm2.enable = true;
   };
 
-  # Kernel
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  # Kernel - use default stable LTS (ZFS compatible)
+  # If ZFS breaks with default kernel, pin explicitly:
+  # boot.kernelPackages = pkgs.linuxPackages_6_6;
   
   # ZFS kernel module
   boot.supportedFilesystems = [ "zfs" ];
