@@ -68,7 +68,8 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 - `search_nixos_options` - system options (services, hardware, etc.)
 - `search_nixos_packages` - package lookup
 - `search_home_manager_options` - home-manager options
-	- `warm_cache` - build/cache JSON artifacts locally
+
+Build caches synchronously via `tools/nixos-mcp/scripts/build-caches.mjs --all`.
 
 Rule: Before naming any NixOS/Home-Manager option or package attr, query the MCP tools first (don’t invent option names).
 
@@ -79,7 +80,13 @@ Local-first direction: nixpkgs already contains generators for the same data we 
 - NixOS options: nixpkgs builds a canonical `options.json` via `nixosOptionsDoc` / `nixos/lib/make-options-doc`.
 - Home-Manager options: the extranix site now loads `data/options-<release>.json` (the old `/api` JSON endpoint appears gone), so we can cache that file or build HM options JSON from a pinned HM source.
 
-Implementation note: MCP searches `stable` vs `unstable` directly from flake inputs (`nixpkgs` vs `nixpkgs-unstable`) and caches JSON under `tools/nixos-mcp/.cache/`. `warm_cache` prebuilds caches; `scripts/sync-home-manager.sh` adds a pinned HM grepping corpus.
+Implementation note: MCP searches `stable` vs `unstable` directly from flake inputs (`nixpkgs` vs `nixpkgs-unstable`) and reads artifacts under `tools/nixos-mcp/.cache/`. Cache building is external/synchronous; `scripts/sync-home-manager.sh` adds a pinned HM grepping corpus.
+
+Perf constraint: `nix search` per-query is too slow for interactive use; package search uses a locally built index (TSV + `rg`) keyed by the pinned flake input so lookups are millisecond-fast after the one-time build.
+
+Reliability constraint: avoid long-running cache builds inside MCP tool calls (client timeouts, process-group SIGINT). MCP tools *assert caches exist* and, if missing, return `status=missing_cache` with an explicit synchronous build command (`tools/nixos-mcp/scripts/build-caches.mjs --all`) to run, then retry.
+
+Maintenance note: the MCP server implementation uses the SDK's high-level `McpServer.registerTool` API (the lower-level `Server` is deprecated).
 
 Philosophy: Give the AI real tools instead of making it hallucinate option names.
 

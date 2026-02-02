@@ -2,14 +2,16 @@
 
 MCP server that provides NixOS/Home-Manager option search directly to your AI.
 
-This server is **local-first**: it shells out to `nix` using the flake inputs pinned in `flake.lock` and caches JSON artifacts under `tools/nixos-mcp/.cache/`.
+This server is **local-first**: it shells out to `nix` using the flake inputs pinned in `flake.lock` and reads artifacts from `tools/nixos-mcp/.cache/`.
+
+Performance: package search uses a prebuilt TSV index + `rg` (ripgrep) for millisecond lookups.
 
 ## Tools
 
 - **search_nixos_options** - Search NixOS system options (services, hardware, etc.)
 - **search_nixos_packages** - Search Nix packages by name/description
 - **search_home_manager_options** - Search Home-Manager user options
-- **warm_cache** - Build/caches option JSONs (recommended once per container)
+- Cache building is intentionally *external* and synchronous (to avoid MCP client timeouts).
 
 Channels: `stable` and `unstable` (mapped to this repo's `nixpkgs` and `nixpkgs-unstable` inputs).
 
@@ -20,9 +22,21 @@ cd tools/nixos-mcp
 npm install
 ```
 
-Optional (recommended): warm caches once so first queries are instant.
+Recommended: build caches once per flake update:
 
-The MCP client can call `warm_cache`, or you can just run a query and let it build on-demand.
+`node tools/nixos-mcp/scripts/build-caches.mjs --all`
+
+If a cache is missing, tools return:
+
+```json
+{ "status": "missing_cache", "kind": "packages", "channel": "stable", "expectedPath": "...", "buildCommand": "..." }
+```
+
+When caches exist, tools return:
+
+```json
+{ "status": "ok", "results": [ ... ] }
+```
 
 ## VS Code Configuration
 
@@ -54,4 +68,5 @@ Example queries:
 ## Notes
 
 - Cache dir: `tools/nixos-mcp/.cache/` (override with `NIXOS_MCP_CACHE_DIR`).
+- Caches are keyed by the pinned flake input (prefers `locked.narHash`, falls back to `locked.rev`).
 - If you want local corpora for grepping too, see `scripts/sync-nixpkgs.sh` and `scripts/sync-home-manager.sh`.
