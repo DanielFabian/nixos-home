@@ -37,9 +37,11 @@
           size = 5;
           passes = 2;
         };
-        drop_shadow = true;
-        shadow_range = 15;
-        shadow_render_power = 3;
+        shadow = {
+          enabled = true;
+          range = 15;
+          render_power = 3;
+        };
       };
 
       animations = {
