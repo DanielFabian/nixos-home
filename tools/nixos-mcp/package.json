@@ -10,7 +10,7 @@
     "scripts": {
         "start": "node src/index.js",
         "dev": "node --watch src/index.js",
-        "build-caches": "node scripts/build-caches.mjs --all",
+        "build-caches": "node scripts/build-caches.mjs",
         "smoke": "node scripts/smoke.mjs"
     },
     "dependencies": {

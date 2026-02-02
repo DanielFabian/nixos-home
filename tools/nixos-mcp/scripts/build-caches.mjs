@@ -188,6 +188,72 @@ async function runPipelineToFile(producer, transformer, outFile, { cwd } = {}) {
     });
 }
 
+async function fileHasNewline(filePath, maxBytes = 64 * 1024) {
+    const handle = await fsp.open(filePath, "r");
+    try {
+        const stat = await handle.stat();
+        const size = stat.size ?? 0;
+        const toRead = Math.max(0, Math.min(size, maxBytes));
+        if (toRead === 0) return false;
+
+        const buf = Buffer.alloc(toRead);
+        await handle.read(buf, 0, toRead, 0);
+        return buf.includes(0x0a);
+    } finally {
+        await handle.close();
+    }
+}
+
+async function runCommandToFile(command, args, outFile, { cwd } = {}) {
+    await ensureDir(path.dirname(outFile));
+
+    return await new Promise((resolve, reject) => {
+        const child = spawn(command, args, {
+            cwd,
+            env: process.env,
+            stdio: ["ignore", "pipe", "pipe"],
+        });
+
+        const stderrChunks = [];
+        child.stderr.on("data", (d) => stderrChunks.push(d));
+
+        child.on("error", reject);
+
+        const outStream = fs.createWriteStream(outFile, { encoding: "utf8" });
+        outStream.on("error", reject);
+        child.stdout.pipe(outStream);
+
+        child.on("close", (code) => {
+            const exitCode = code ?? 0;
+            if (exitCode === 0) {
+                resolve();
+                return;
+            }
+            reject(
+                new Error(
+                    `Command failed (${command} ${args.join(" ")}):\n${Buffer.concat(stderrChunks).toString("utf8")}`
+                )
+            );
+        });
+    });
+}
+
+async function ensureMultilineJson(jsonPath, { cwd } = {}) {
+    if (!(await fileExists(jsonPath))) return false;
+
+    const hasNewline = await fileHasNewline(jsonPath);
+    if (hasNewline) return false;
+
+    const tmpPath = `${jsonPath}.tmp`;
+    // Keep size overhead minimal while making it editor/rg friendly.
+    // NOTE: jq 1.7 with --indent 0 produces compact one-line output.
+    await runCommandToFile("jq", ["--indent", "1", ".", jsonPath], tmpPath, {
+        cwd,
+    });
+    await fsp.rename(tmpPath, jsonPath);
+    return true;
+}
+
 async function getFlakeInputOutPath(root, inputName) {
     if (memo.flakeInputOutPathByInput.has(inputName)) {
         return memo.flakeInputOutPathByInput.get(inputName);
@@ -359,7 +425,10 @@ async function buildNixosOptions(root, channel) {
     await ensureDir(outDir);
 
     const finalPath = await expectedNixosOptionsPath(root, channel);
-    if (await fileExists(finalPath)) return finalPath;
+    if (await fileExists(finalPath)) {
+        await ensureMultilineJson(finalPath, { cwd: root });
+        return finalPath;
+    }
 
     const nixpkgsPath = await getFlakeInputOutPath(root, inputName);
 
@@ -385,6 +454,7 @@ async function buildNixosOptions(root, channel) {
     if (!(await fileExists(optionsJson))) throw new Error(`could not locate options.json under ${outPath}`);
 
     await fsp.copyFile(optionsJson, finalPath);
+    await ensureMultilineJson(finalPath, { cwd: root });
     return finalPath;
 }
 
@@ -393,7 +463,10 @@ async function buildHomeManagerOptions(root) {
     await ensureDir(outDir);
 
     const finalPath = await expectedHomeManagerOptionsPath(root);
-    if (await fileExists(finalPath)) return finalPath;
+    if (await fileExists(finalPath)) {
+        await ensureMultilineJson(finalPath, { cwd: root });
+        return finalPath;
+    }
 
     const hmPath = await getFlakeInputOutPath(root, "home-manager");
     const system = await getCurrentSystem(root);
@@ -412,6 +485,7 @@ async function buildHomeManagerOptions(root) {
     if (!(await fileExists(optionsJson))) throw new Error(`could not locate options.json under ${outPath}`);
 
     await fsp.copyFile(optionsJson, finalPath);
+    await ensureMultilineJson(finalPath, { cwd: root });
     return finalPath;
 }
 
@@ -444,6 +518,8 @@ async function main() {
             if (await fileExists(expected)) {
                 console.log(`nixos options (${c}) already present`);
                 console.log(`  -> ${expected}`);
+                const reformatted = await ensureMultilineJson(expected, { cwd: root });
+                if (reformatted) console.log("  (reformatted to multiline JSON)");
             } else {
                 console.log(`building nixos options (${c})...`);
                 const p = await buildNixosOptions(root, c);
@@ -457,6 +533,8 @@ async function main() {
         if (await fileExists(expected)) {
             console.log("home-manager options already present");
             console.log(`  -> ${expected}`);
+            const reformatted = await ensureMultilineJson(expected, { cwd: root });
+            if (reformatted) console.log("  (reformatted to multiline JSON)");
         } else {
             console.log("building home-manager options...");
             const p = await buildHomeManagerOptions(root);

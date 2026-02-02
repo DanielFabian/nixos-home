@@ -24,7 +24,7 @@ npm install
 
 Recommended: build caches once per flake update:
 
-`node tools/nixos-mcp/scripts/build-caches.mjs --all`
+`npm --prefix tools/nixos-mcp run -s build-caches`
 
 If a cache is missing, tools return:
 

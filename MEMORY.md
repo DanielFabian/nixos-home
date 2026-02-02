@@ -84,9 +84,17 @@ Implementation note: MCP searches `stable` vs `unstable` directly from flake inp
 
 Perf constraint: `nix search` per-query is too slow for interactive use; package search uses a locally built index (TSV + `rg`) keyed by the pinned flake input so lookups are millisecond-fast after the one-time build.
 
+Perf observation: first option/HM query is slower due to JSON load/parse; subsequent queries in the same server process are much faster (memoized JSON).
+
 Reliability constraint: avoid long-running cache builds inside MCP tool calls (client timeouts, process-group SIGINT). MCP tools *assert caches exist* and, if missing, return `status=missing_cache` with an explicit synchronous build command (`tools/nixos-mcp/scripts/build-caches.mjs --all`) to run, then retry.
 
+Ergonomics: cached option JSON files are rewritten to multiline (jq pretty-print) so they're not single ~10MB lines in editors; MCP parsing is unchanged.
+
+User preference: keep cache artifacts editor/rg-friendly (avoid single-line mega-JSON).
+
 Maintenance note: the MCP server implementation uses the SDK's high-level `McpServer.registerTool` API (the lower-level `Server` is deprecated).
+
+Validation: confirmed via stdio client that `listTools` works and each tool returns structured JSON (e.g. `ok` for built caches and `missing_cache` for absent caches).
 
 Philosophy: Give the AI real tools instead of making it hallucinate option names.
 

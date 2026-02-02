@@ -150,7 +150,7 @@ function shellQuote(value) {
 
 function cacheBuildCommand() {
     // Intentionally synchronous/external to avoid MCP client timeouts.
-    return `cd ${shellQuote(getWorkspaceRoot())} && node tools/nixos-mcp/scripts/build-caches.mjs --all`;
+    return `cd ${shellQuote(getWorkspaceRoot())} && npm --prefix tools/nixos-mcp run -s build-caches`;
 }
 
 const memo = {
