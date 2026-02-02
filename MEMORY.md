@@ -31,6 +31,8 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 - Sanoid for snapshots
 - Hyprland for Wayland compositor
 - Standard `nvidia` driver (Pascal)
+- Flatpak for rolling GUI apps (Flathub)
+- Docker + libvirt for dev containers and VMs
 
 **User preferences**:
 - Colemak-DH layout
