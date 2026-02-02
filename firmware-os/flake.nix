@@ -32,9 +32,12 @@
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, disko, lanzaboote, hyprland, ... }@inputs:
   let
-    # Unstable overlay for rolling apps
+    # Unstable overlay for rolling apps (with unfree enabled)
     unstableOverlay = final: prev: {
-      unstable = nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system};
+      unstable = import nixpkgs-unstable {
+        system = prev.stdenv.hostPlatform.system;
+        config.allowUnfree = true;
+      };
     };
   in
   {
