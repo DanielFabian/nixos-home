@@ -17,8 +17,9 @@
       "$terminal" = "foot";
       "$menu" = "wofi --show drun";
 
-      # Monitor config - auto for now, customize per-setup later
-      monitor = [ ",preferred,auto,1" ];
+      # Monitor config - 4K at 1.5x scale for 15" display
+      # Use `hyprctl monitors` to see connected displays, adjust as needed
+      monitor = [ ",preferred,auto,1.5" ];
 
       # General appearance
       general = {

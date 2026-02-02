@@ -44,15 +44,27 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 
 **Hyprland keybinds**: Using vim-style navigation mapped to Colemak-DH physical positions (mnei instead of hjkl).
 
+**Display**: 4K @ 1.5x scale (Hyprland)
+
 **Confirmed hardware**:
 - Intel UHD: PCI:0:2:0 ✓
 - Quadro P1000: PCI:1:0:0 ✓
 
-**Next steps**:
-1. Boot ZBook with NixOS installer
-2. Verify disk device name (`lsblk`)
-3. Clone repo, run disko
-4. Install and iterate
+**Installation workflow**:
+1. Boot ZBook with NixOS installer USB
+2. Verify disk device name (`lsblk` - expect `/dev/nvme0n1`)
+3. Clone repo, run disko: `sudo nix run github:nix-community/disko -- --mode disko ./disko/zbook.nix`
+4. Install: `sudo nixos-install --flake .#zbook`
+5. Reboot, enter LUKS passphrase manually first time
+6. **TPM2 enrollment** (after first successful boot):
+   ```bash
+   # Verify TPM exists
+   ls /dev/tpm*
+   # Enroll TPM2 (PCR 0=firmware, 7=secure boot state)
+   sudo systemd-cryptenroll /dev/nvme0n1p3 --tpm2-device=auto --tpm2-pcrs=0+7
+   # Test: reboot should auto-unlock
+   ```
+7. (Phase 2) Secure Boot with Lanzaboote
 
 **Open questions**:
 - Wallpaper rotation setup? (old config had feh timer)
