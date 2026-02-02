@@ -11,6 +11,7 @@
     ../../modules/firmware/virtualization.nix
     ../../modules/firmware/networking.nix
     ../../modules/desktop/hyprland.nix
+    ../../modules/desktop/plasma.nix  # fallback DE
     ../../modules/users/dany.nix
   ];
 
