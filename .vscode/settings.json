@@ -1,21 +1,23 @@
 {
-  "nix.enableLanguageServer": true,
-  "nix.serverPath": "nil",
-  "nix.serverSettings": {
-    "nil": {
-      "formatting": {
-        "command": ["nixfmt"]
-      }
+    "nix.enableLanguageServer": true,
+    "nix.serverPath": "nil",
+    "nix.serverSettings": {
+        "nil": {
+            "formatting": {
+                "command": [
+                    "nixfmt"
+                ]
+            }
+        }
+    },
+    "editor.formatOnSave": true,
+    "[nix]": {
+        "editor.defaultFormatter": "jnoortheen.nix-ide"
+    },
+    "files.associations": {
+        "flake.lock": "json"
+    },
+    "search.exclude": {
+        "**/nixpkgs/**": true
     }
-  },
-  "editor.formatOnSave": true,
-  "[nix]": {
-    "editor.defaultFormatter": "jnoortheen.nix-ide"
-  },
-  "files.associations": {
-    "flake.lock": "json"
-  },
-  "search.exclude": {
-    "**/nixpkgs/**": true
-  }
 }

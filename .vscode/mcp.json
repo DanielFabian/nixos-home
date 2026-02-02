@@ -1,9 +1,11 @@
 {
-  "servers": {
-    "nixos": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["tools/nixos-mcp/src/index.js"]
+    "servers": {
+        "nixos": {
+            "type": "stdio",
+            "command": "node",
+            "args": [
+                "tools/nixos-mcp/src/index.js"
+            ]
+        }
     }
-  }
 }
