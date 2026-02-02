@@ -21,10 +21,11 @@
   # Firmware philosophy: set once, forget
   time.timeZone = "Europe/London";
 
-  # Console: Colemak-DH + early setup for LUKS prompt
+  # Console: Colemak-DH ISO UK + early setup for LUKS prompt
+  # List available keymaps: ls /run/current-system/sw/share/keymaps/**/*.map.gz
   console = {
     earlySetup = true;
-    keyMap = "colemak";  # TODO: colemak-dh variant if available, else remap in userspace
+    keyMap = "colemak_dh_iso_uk";  # from kbd package
   };
 
   # Nix settings
