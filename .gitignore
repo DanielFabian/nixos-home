@@ -1,8 +1,14 @@
 # nixpkgs shallow clone (reference corpus, not a submodule)
 /nixpkgs/
 
+# home-manager shallow clone (reference corpus, not a submodule)
+/home-manager/
+
 # Node dependencies for tools
 /tools/*/node_modules/
+
+# MCP server caches (generated)
+/tools/nixos-mcp/.cache/
 
 # Nix build artifacts
 /result

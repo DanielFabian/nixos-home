@@ -62,10 +62,24 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 
 **nixpkgs grepping**: `scripts/sync-nixpkgs.sh` shallow-clones nixpkgs for ripgrep searches. Gitignored, not a submodule.
 
+**Submodules decision**: Avoid submodules for nixpkgs/home-manager; use `flake.lock` as the single source of truth for pins. Local clones are optional grepping corpora only.
+
 **MCP Server** (`tools/nixos-mcp/`): HTTP proxy to search.nixos.org Elasticsearch API. Three tools:
 - `search_nixos_options` - system options (services, hardware, etc.)
 - `search_nixos_packages` - package lookup
 - `search_home_manager_options` - home-manager options
+	- `warm_cache` - build/cache JSON artifacts locally
+
+Rule: Before naming any NixOS/Home-Manager option or package attr, query the MCP tools first (don’t invent option names).
+
+Status (2026-02-02): Upstream endpoints changed — `search.nixos.org/backend` now returns 401 (Basic/Bonsai) and `home-manager-options.extranix.com/api` serves HTML. MCP now uses local `nix` + pinned flake inputs instead.
+
+Local-first direction: nixpkgs already contains generators for the same data we want to search:
+- Packages: `nixpkgs/pkgs/top-level/packages-info.nix` emits a big `packages.json` (used by `make-tarball.nix`).
+- NixOS options: nixpkgs builds a canonical `options.json` via `nixosOptionsDoc` / `nixos/lib/make-options-doc`.
+- Home-Manager options: the extranix site now loads `data/options-<release>.json` (the old `/api` JSON endpoint appears gone), so we can cache that file or build HM options JSON from a pinned HM source.
+
+Implementation note: MCP searches `stable` vs `unstable` directly from flake inputs (`nixpkgs` vs `nixpkgs-unstable`) and caches JSON under `tools/nixos-mcp/.cache/`. `warm_cache` prebuilds caches; `scripts/sync-home-manager.sh` adds a pinned HM grepping corpus.
 
 Philosophy: Give the AI real tools instead of making it hallucinate option names.
 

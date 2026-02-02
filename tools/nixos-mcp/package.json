@@ -9,7 +9,8 @@
     },
     "scripts": {
         "start": "node src/index.js",
-        "dev": "node --watch src/index.js"
+        "dev": "node --watch src/index.js",
+        "smoke": "node scripts/smoke.mjs"
     },
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.0.0"
