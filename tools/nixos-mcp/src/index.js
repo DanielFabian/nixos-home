@@ -16,14 +16,15 @@ import {
 const NIXOS_ES_URL = "https://search.nixos.org/backend";
 const HM_OPTIONS_URL = "https://home-manager-options.extranix.com/api";
 
-// NixOS channel to search (matches our flake)
-const CHANNEL = "unstable";
+// Available channels for search
+const VALID_CHANNELS = ["unstable", "24.11", "24.05", "23.11"];
+const DEFAULT_CHANNEL = "unstable";
 
 /**
  * Search NixOS options via Elasticsearch
  */
-async function searchNixosOptions(query, limit = 20) {
-  const response = await fetch(`${NIXOS_ES_URL}/latest-42-nixos-${CHANNEL}/_search`, {
+async function searchNixosOptions(query, channel = DEFAULT_CHANNEL, limit = 20) {
+  const response = await fetch(`${NIXOS_ES_URL}/latest-42-nixos-${channel}/_search`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -76,8 +77,8 @@ async function searchNixosOptions(query, limit = 20) {
 /**
  * Search NixOS packages
  */
-async function searchNixosPackages(query, limit = 20) {
-  const response = await fetch(`${NIXOS_ES_URL}/latest-42-nixos-${CHANNEL}/_search`, {
+async function searchNixosPackages(query, channel = DEFAULT_CHANNEL, limit = 20) {
+  const response = await fetch(`${NIXOS_ES_URL}/latest-42-nixos-${channel}/_search`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -178,6 +179,10 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             type: "string",
             description: "Search query (e.g., 'zfs', 'nvidia', 'services.xserver')",
           },
+          channel: {
+            type: "string",
+            description: "NixOS channel to search: 'unstable', '24.11', '24.05', '23.11' (default: unstable)",
+          },
           limit: {
             type: "number",
             description: "Maximum results to return (default: 20)",
@@ -196,6 +201,10 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           query: {
             type: "string",
             description: "Package name or description to search",
+          },
+          channel: {
+            type: "string",
+            description: "NixOS channel to search: 'unstable', '24.11', '24.05', '23.11' (default: unstable)",
           },
           limit: {
             type: "number",
@@ -233,13 +242,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
   try {
     let results;
+    const channel = args.channel || DEFAULT_CHANNEL;
 
     switch (name) {
       case "search_nixos_options":
-        results = await searchNixosOptions(args.query, args.limit);
+        results = await searchNixosOptions(args.query, channel, args.limit);
         break;
       case "search_nixos_packages":
-        results = await searchNixosPackages(args.query, args.limit);
+        results = await searchNixosPackages(args.query, channel, args.limit);
         break;
       case "search_home_manager_options":
         results = await searchHomeManagerOptions(args.query, args.limit);
