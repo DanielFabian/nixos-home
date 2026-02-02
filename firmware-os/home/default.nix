@@ -26,9 +26,9 @@
   # Git config
   programs.git = {
     enable = true;
-    userName = "Daniel Fabian";
-    userEmail = "daniel.fabian@integral-it.ch";  # update if changed
-    extraConfig = {
+    settings = {
+      user.name = "Daniel Fabian";
+      user.email = "daniel.fabian@integral-it.ch";  # update if changed
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;

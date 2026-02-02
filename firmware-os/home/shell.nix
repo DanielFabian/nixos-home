@@ -10,7 +10,7 @@
     # Vi mode
     defaultKeymap = "viins";
     
-    initExtra = ''
+    initContent = ''
       # Vi mode indicator in prompt
       function zle-line-init zle-keymap-select {
         case $KEYMAP in

@@ -30,7 +30,7 @@
     
     # Formatters
     stylua
-    nixfmt-rfc-style
+    nixfmt
     prettierd
     
     # LazyVim extras
