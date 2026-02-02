@@ -40,7 +40,7 @@
   {
     nixosConfigurations = {
       zbook = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        # system inferred from hardware-configuration.nix (nixpkgs.hostPlatform)
         specialArgs = { inherit inputs; };
         modules = [
           # Declarative disk layout
@@ -59,8 +59,11 @@
             home-manager.users.dany = import ./home;
           }
 
-          # Overlays
-          { nixpkgs.overlays = [ unstableOverlay ]; }
+          # Overlays + unfree (NVIDIA driver)
+          { 
+            nixpkgs.overlays = [ unstableOverlay ];
+            nixpkgs.config.allowUnfree = true;
+          }
 
           # Machine config
           ./hosts/zbook
