@@ -10,9 +10,10 @@
   };
 
   # XDG portal for screen sharing, file dialogs, etc
+  # Note: Hyprland flake handles xdg-desktop-portal-hyprland automatically
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+    # extraPortals managed by programs.hyprland when using the flake
   };
 
   # Recommended utilities (home-manager handles most config)
