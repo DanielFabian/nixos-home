@@ -13,6 +13,8 @@ Philosophy: "GNU/Linux except Linux" - make the kernel and drivers disappear lik
 
 Key invariant: ZFS snapshots as first-class rollback for *everything* (system state + uncommitted work), not just nix generations.
 
+**Repo structure**: Hoisted from `firmware-os/` to root (2026-02-02). Legacy configs (XMonad/X11/PulseAudio era) in git history only.
+
 ## Active Tasks
 
 ### Bootstrap HP ZBook Studio x360 G5
@@ -44,8 +46,6 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 - Intel UHD: PCI:0:2:0 ✓
 - Quadro P1000: PCI:1:0:0 ✓
 
-**Repo structure**: Lives in `nixos-home/firmware-os/` subfolder (old config kept for reference/parts).
-
 **Next steps**:
 1. Boot ZBook with NixOS installer
 2. Verify disk device name (`lsblk`)
@@ -55,6 +55,19 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 **Open questions**:
 - Wallpaper rotation setup? (old config had feh timer)
 - TrueNAS syncoid target configuration
+
+### Dev Environment Tooling
+
+**Devcontainer**: Ubuntu 24.04 + Nix feature, full `nixos-rebuild --dry-run` capability. Includes nil LSP + nixfmt.
+
+**nixpkgs grepping**: `scripts/sync-nixpkgs.sh` shallow-clones nixpkgs for ripgrep searches. Gitignored, not a submodule.
+
+**MCP Server** (`tools/nixos-mcp/`): HTTP proxy to search.nixos.org Elasticsearch API. Three tools:
+- `search_nixos_options` - system options (services, hardware, etc.)
+- `search_nixos_packages` - package lookup
+- `search_home_manager_options` - home-manager options
+
+Philosophy: Give the AI real tools instead of making it hallucinate option names.
 
 ### Keyboard layout consistency
 

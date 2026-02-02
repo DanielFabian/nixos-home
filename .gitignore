@@ -1,0 +1,19 @@
+# nixpkgs shallow clone (reference corpus, not a submodule)
+/nixpkgs/
+
+# Node dependencies for tools
+/tools/*/node_modules/
+
+# Nix build artifacts
+/result
+/result-*
+
+# Editor artifacts
+*.swp
+*.swo
+*~
+.direnv/
+
+# OS artifacts
+.DS_Store
+Thumbs.db

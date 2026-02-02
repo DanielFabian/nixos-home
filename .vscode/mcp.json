@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "nixos": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["tools/nixos-mcp/src/index.js"]
+    }
+  }
+}

@@ -27,8 +27,8 @@
 
     shellAliases = {
       # Nix shortcuts
-      rebuild = "sudo nixos-rebuild switch --flake ~/src/firmware-os#zbook";
-      update = "nix flake update ~/src/firmware-os && rebuild";
+      rebuild = "sudo nixos-rebuild switch --flake ~/src/nixos-home#zbook";
+      update = "nix flake update ~/src/nixos-home && rebuild";
       
       # Common
       ls = "eza";
