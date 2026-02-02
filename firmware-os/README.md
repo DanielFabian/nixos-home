@@ -15,8 +15,8 @@
 ```bash
 # 1. Get this repo
 nix-shell -p git
-git clone https://github.com/youruser/firmware-os /tmp/config
-cd /tmp/config
+git clone https://github.com/youruser/nixos-home /tmp/config
+cd /tmp/config/firmware-os
 
 # 2. Verify disk device (adjust disko/zbook.nix if needed)
 lsblk

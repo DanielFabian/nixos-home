@@ -40,12 +40,17 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 
 **Hyprland keybinds**: Using vim-style navigation mapped to Colemak-DH physical positions (mnei instead of hjkl).
 
+**Confirmed hardware**:
+- Intel UHD: PCI:0:2:0 ✓
+- Quadro P1000: PCI:1:0:0 ✓
+
+**Repo structure**: Lives in `nixos-home/firmware-os/` subfolder (old config kept for reference/parts).
+
 **Next steps**:
 1. Boot ZBook with NixOS installer
 2. Verify disk device name (`lsblk`)
-3. Run disko
-4. Verify NVIDIA bus IDs (`lspci | grep -i nvidia`)
-5. Install and iterate
+3. Clone repo, run disko
+4. Install and iterate
 
 **Open questions**:
 - Wallpaper rotation setup? (old config had feh timer)
