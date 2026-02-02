@@ -55,3 +55,9 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 **Open questions**:
 - Wallpaper rotation setup? (old config had feh timer)
 - TrueNAS syncoid target configuration
+
+### Keyboard layout consistency
+
+**Problem discovered**: LUKS prompt + emergency shell used inconsistent keymaps (Colemak vs Colemak-DH, ANSI vs ISO), causing passphrase/user password confusion.
+
+**Decision**: Use XKB as the single source of truth (ISO UK + `mod_dh_iso_uk`), and set `console.useXkbConfig = true` so TTY derives its keymap from XKB. Home-manager no longer sets `XKB_DEFAULT_*` env vars; Hyprland input config is derived from system XKB via `osConfig`.

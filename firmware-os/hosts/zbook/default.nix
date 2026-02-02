@@ -21,11 +21,20 @@
   # Firmware philosophy: set once, forget
   time.timeZone = "Europe/London";
 
-  # Console: Colemak-DH ISO UK + early setup for LUKS prompt
-  # List available keymaps: ls /run/current-system/sw/share/keymaps/**/*.map.gz
+  # Keyboard: ISO UK + Colemak Mod-DH
+  # `console.keyMap` is for kbd keymaps (loadkeys) and doesn't understand XKB variants.
+  # For Mod-DH (XKB-only variants like `mod_dh_iso_uk`), use XKB everywhere and have
+  # the console derive its keymap from it.
+  services.xserver.xkb = {
+    model = "pc105";              # ISO keyboard
+    layout = "gb";                # UK
+    variant = "mod_dh_iso_uk";    # Colemak Mod-DH (ISO UK)
+    options = "caps:escape";
+  };
+
   console = {
     earlySetup = true;
-    keyMap = "colemak_dh_iso_uk";  # from kbd package
+    useXkbConfig = true;
   };
 
   # Nix settings
