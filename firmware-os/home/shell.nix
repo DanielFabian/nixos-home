@@ -61,8 +61,6 @@
   # Modern CLI tools
   programs.eza.enable = true;         # ls replacement
   programs.bat.enable = true;         # cat replacement
-  programs.fd.enable = true;          # find replacement
-  programs.ripgrep.enable = true;     # grep replacement
   programs.fzf.enable = true;         # fuzzy finder
   programs.zoxide.enable = true;      # cd replacement
 
