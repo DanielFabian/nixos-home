@@ -30,8 +30,9 @@
       "zfs"
     ];
     
-    # Systemd in initrd for cleaner boot + TPM2 support
-    systemd.enable = true;
+    # Systemd in initrd - DISABLED for now, disko LUKS works better with traditional initrd
+    # Re-enable after we get TPM2 auto-unlock working
+    systemd.enable = false;
     
     # TODO: TPM2 auto-unlock after secure boot
     # systemd.tpm2.enable = true;
