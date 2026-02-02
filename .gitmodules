@@ -1,3 +1,0 @@
-[submodule "systems/dany-macbook-pro/nixpkgs"]
-	path = systems/dany-macbook-pro/nixpkgs
-	url = https://github.com/DanielFabian/nixpkgs
