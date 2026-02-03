@@ -89,6 +89,7 @@
         "$mod, D, exec, $menu"
         "$mod, Q, killactive"
         "$mod SHIFT, E, exit"
+        "CTRL ALT, BackSpace, exit" # old school zap
         "$mod, V, togglefloating"
         "$mod, F, fullscreen"
         "$mod, P, pseudo" # dwindle

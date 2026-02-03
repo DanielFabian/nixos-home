@@ -1,133 +1,143 @@
 # Niri user configuration
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # Niri config in KDL format
-  xdg.configFile."niri/config.kdl".text = ''
-    // Niri configuration - scrollable tiling compositor
-    // Docs: https://github.com/YaLTeR/niri/wiki/Configuration
+  # Using force to handle existing files, and ensuring directory exists
+  xdg.configFile."niri/config.kdl" = {
+    force = true;
+    text = ''
+        // Niri configuration - scrollable tiling compositor
+        // Docs: https://github.com/YaLTeR/niri/wiki/Configuration
 
-    input {
-        keyboard {
-            xkb {
-                layout "gb"
-                variant "colemak_dh"
-                options "caps:escape"
+        input {
+            keyboard {
+                xkb {
+                    layout "gb"
+                    variant "colemak_dh"
+                    options "caps:escape"
+                }
             }
-        }
 
-        touchpad {
-            tap
-            natural-scroll
-            accel-speed 0.2
-        }
+            touchpad {
+                tap
+              natural-scroll
+              accel-speed 0.2
+          }
 
-        mouse {
-            accel-speed 0.0
-        }
-    }
+          mouse {
+              accel-speed 0.0
+          }
+      }
 
-    output "eDP-1" {
-        scale 1.5
-    }
+      output "eDP-1" {
+          scale 1.5
+      }
 
-    layout {
-        gaps 10
-        center-focused-column "never"
+      layout {
+          gaps 10
+          center-focused-column "never"
 
-        preset-column-widths {
-            proportion 0.33333
-            proportion 0.5
-            proportion 0.66667
-        }
+          preset-column-widths {
+              proportion 0.33333
+              proportion 0.5
+              proportion 0.66667
+          }
 
-        default-column-width { proportion 0.5; }
+          default-column-width { proportion 0.5; }
 
-        focus-ring {
-            width 2
-            active-color "#7aa2f7"
-            inactive-color "#414868"
-        }
+          focus-ring {
+              width 2
+              active-color "#7aa2f7"
+              inactive-color "#414868"
+          }
 
-        border {
-            off
-        }
-    }
+          border {
+              off
+          }
+      }
 
-    // Spawn commands
-    spawn-at-startup "waybar"
-    spawn-at-startup "mako"
-    spawn-at-startup "nm-applet" "--indicator"
+      // Spawn commands
+      spawn-at-startup "waybar"
+      spawn-at-startup "mako"
+      spawn-at-startup "nm-applet" "--indicator"
 
-    // Hotkey bindings - using Mod (Super)
-    binds {
-        // Core actions
-        Mod+Return { spawn "foot"; }
-        Mod+D { spawn "wofi" "--show" "drun"; }
-        Mod+Q { close-window; }
-        Mod+Shift+E { quit; }
-        Mod+L { spawn "swaylock"; }
+      // Hotkey bindings - using Mod (Super)
+      binds {
+          // Core actions
+          Mod+Return { spawn "foot"; }
+          Mod+D { spawn "wofi" "--show" "drun"; }
+          Mod+Q { close-window; }
+          Mod+Shift+Q { quit; }
+          Ctrl+Alt+BackSpace { quit; }  // old school zap
+          Mod+L { spawn "swaylock"; }
 
-        // Focus movement (Colemak-DH: mnei = hjkl positions)
-        Mod+M { focus-column-left; }
-        Mod+N { focus-window-down; }
-        Mod+E { focus-window-up; }
-        Mod+I { focus-column-right; }
+          // Focus movement (Colemak-DH: mnei = hjkl positions)
+          Mod+M { focus-column-left; }
+          Mod+N { focus-window-down; }
+          Mod+E { focus-window-up; }
+          Mod+I { focus-column-right; }
 
-        // Move windows
-        Mod+Shift+M { move-column-left; }
-        Mod+Shift+N { move-window-down; }
-        Mod+Shift+E { move-window-up; }
-        Mod+Shift+I { move-column-right; }
+          // Move windows
+          Mod+Shift+M { move-column-left; }
+          Mod+Shift+N { move-window-down; }
+          Mod+Shift+E { move-window-up; }
+          Mod+Shift+I { move-column-right; }
 
-        // Column width
-        Mod+Minus { set-column-width "-10%"; }
-        Mod+Equal { set-column-width "+10%"; }
+          // Column width
+          Mod+Minus { set-column-width "-10%"; }
+          Mod+Equal { set-column-width "+10%"; }
 
-        // Workspaces
-        Mod+1 { focus-workspace 1; }
-        Mod+2 { focus-workspace 2; }
-        Mod+3 { focus-workspace 3; }
-        Mod+4 { focus-workspace 4; }
-        Mod+5 { focus-workspace 5; }
-        Mod+6 { focus-workspace 6; }
-        Mod+7 { focus-workspace 7; }
-        Mod+8 { focus-workspace 8; }
-        Mod+9 { focus-workspace 9; }
+          // Workspaces
+          Mod+1 { focus-workspace 1; }
+          Mod+2 { focus-workspace 2; }
+          Mod+3 { focus-workspace 3; }
+          Mod+4 { focus-workspace 4; }
+          Mod+5 { focus-workspace 5; }
+          Mod+6 { focus-workspace 6; }
+          Mod+7 { focus-workspace 7; }
+          Mod+8 { focus-workspace 8; }
+          Mod+9 { focus-workspace 9; }
 
-        // Move to workspace
-        Mod+Shift+1 { move-column-to-workspace 1; }
-        Mod+Shift+2 { move-column-to-workspace 2; }
-        Mod+Shift+3 { move-column-to-workspace 3; }
-        Mod+Shift+4 { move-column-to-workspace 4; }
-        Mod+Shift+5 { move-column-to-workspace 5; }
-        Mod+Shift+6 { move-column-to-workspace 6; }
-        Mod+Shift+7 { move-column-to-workspace 7; }
-        Mod+Shift+8 { move-column-to-workspace 8; }
-        Mod+Shift+9 { move-column-to-workspace 9; }
+          // Move to workspace
+          Mod+Shift+1 { move-column-to-workspace 1; }
+          Mod+Shift+2 { move-column-to-workspace 2; }
+          Mod+Shift+3 { move-column-to-workspace 3; }
+          Mod+Shift+4 { move-column-to-workspace 4; }
+          Mod+Shift+5 { move-column-to-workspace 5; }
+          Mod+Shift+6 { move-column-to-workspace 6; }
+          Mod+Shift+7 { move-column-to-workspace 7; }
+          Mod+Shift+8 { move-column-to-workspace 8; }
+          Mod+Shift+9 { move-column-to-workspace 9; }
 
-        // Scroll through workspaces
-        Mod+Page_Down { focus-workspace-down; }
-        Mod+Page_Up { focus-workspace-up; }
+          // Scroll through workspaces
+          Mod+Page_Down { focus-workspace-down; }
+          Mod+Page_Up { focus-workspace-up; }
 
-        // Maximize/fullscreen
-        Mod+F { maximize-column; }
-        Mod+Shift+F { fullscreen-window; }
+          // Maximize/fullscreen
+          Mod+F { maximize-column; }
+          Mod+Shift+F { fullscreen-window; }
 
-        // Consume/expel from column
-        Mod+BracketLeft { consume-window-into-column; }
-        Mod+BracketRight { expel-window-from-column; }
+          // Consume/expel from column
+          Mod+BracketLeft { consume-window-into-column; }
+          Mod+BracketRight { expel-window-from-column; }
 
-        // Screenshot
-        Print { screenshot; }
-        Shift+Print { screenshot-window; }
-        Ctrl+Print { screenshot-screen; }
-    }
+          // Screenshot
+          Print { screenshot; }
+          Shift+Print { screenshot-window; }
+          Ctrl+Print { screenshot-screen; }
+      }
 
-    // Window rules
-    window-rule {
-        geometry-corner-radius 8
-        clip-to-geometry true
-    }
-  '';
+      // Window rules
+      window-rule {
+          geometry-corner-radius 8
+          clip-to-geometry true
+      }
+    '';
+  };
 }
