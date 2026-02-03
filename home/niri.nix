@@ -46,7 +46,7 @@
           gaps 10
 
           // Center single windows at 75% width
-          center-focused-column "on-overflow"
+          center-focused-column "never"
           always-center-single-column
 
           // Allow workspaces to grow upwards too
