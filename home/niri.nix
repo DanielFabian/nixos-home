@@ -158,8 +158,7 @@
       // VS Code main window opens fullscreen
       // Main window has "filename - Visual Studio Code" in title, popups just "Visual Studio Code"
       window-rule {
-          match app-id="code" 
-          exclude title="Visual Studio Code"
+          match app-id="code" title="- Visual Studio Code$"
           open-fullscreen true
       }
     '';
