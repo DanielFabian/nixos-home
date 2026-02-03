@@ -45,8 +45,8 @@
       layout {
           gaps 10
 
-          // Center single windows at 75% width
-          center-focused-column "never"
+          // Center single windows
+          center-focused-column "on-overflow"
           always-center-single-column
 
           // Allow workspaces to grow upwards too
@@ -59,8 +59,8 @@
               proportion 0.75
           }
 
-          // Default to 75% for single windows
-          default-column-width { proportion 0.75; }
+          // Default 50%, use Mod+R to cycle presets (including 75%)
+          default-column-width { proportion 0.5; }
 
           focus-ring {
               width 2
@@ -106,6 +106,7 @@
           // Column width
           Mod+Minus { set-column-width "-10%"; }
           Mod+Equal { set-column-width "+10%"; }
+          Mod+R { switch-preset-column-width; }
 
           // Workspaces (vertical = contexts)
           Mod+1 { focus-workspace 1; }
