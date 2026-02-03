@@ -56,6 +56,8 @@
 
   # Gnome keyring for secrets
   services.gnome.gnome-keyring.enable = true;
+  # Auto-unlock keyring at login via greetd
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
   # Enable greetd display manager (lightweight, Wayland-native)
   services.greetd = {

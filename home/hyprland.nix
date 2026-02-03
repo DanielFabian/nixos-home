@@ -152,6 +152,7 @@
 
       # Startup
       exec-once = [
+        "gnome-keyring-daemon --start --components=secrets,pkcs11"
         "waybar"
         "mako"
         "nm-applet --indicator" # wifi tray icon

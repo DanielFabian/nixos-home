@@ -74,6 +74,7 @@
       }
 
       // Spawn commands
+      spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets,pkcs11"
       spawn-at-startup "waybar"
       spawn-at-startup "mako"
       spawn-at-startup "nm-applet" "--indicator"
