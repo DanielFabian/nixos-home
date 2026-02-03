@@ -11,8 +11,8 @@
         "vscode": {
             "extensions": [
                 "jnoortheen.nix-ide",
-                "mkhl.direnv",
-                "mhutchie.git-graph"
+                "mhutchie.git-graph",
+                "kdl-org.kdl"
             ],
             "settings": {
                 "nix.enableLanguageServer": true,
