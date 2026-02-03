@@ -70,8 +70,9 @@
       gesture = [
         "3, horizontal, workspace" # 3-finger swipe for workspace
         "3, up, fullscreen" # 3-finger up for fullscreen
-        "3, down, special" # 3-finger down for scratchpad
+        "3, down, fullscreen" # 3-finger down to exit fullscreen (toggle)
         "4, horizontal, workspace" # 4-finger swipe also works
+        "4, down, special" # 4-finger down for scratchpad
       ];
 
       dwindle = {

@@ -20,6 +20,7 @@
     ../../modules/desktop/hyprland.nix
     ../../modules/desktop/plasma.nix # fallback DE
     ../../modules/desktop/cosmic.nix # System76 DE (alpha)
+    ../../modules/desktop/niri.nix # scrollable-tiling WM
     ../../modules/users/dany.nix
   ];
 
