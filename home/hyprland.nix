@@ -56,6 +56,24 @@
         ];
       };
 
+      # Touchpad configuration
+      input = {
+        touchpad = {
+          natural_scroll = true;
+          tap-to-click = true;
+          drag_lock = false;
+          disable_while_typing = true;
+        };
+      };
+
+      # Trackpad gestures
+      gesture = [
+        "3, horizontal, workspace" # 3-finger swipe for workspace
+        "3, up, fullscreen" # 3-finger up for fullscreen
+        "3, down, special" # 3-finger down for scratchpad
+        "4, horizontal, workspace" # 4-finger swipe also works
+      ];
+
       dwindle = {
         pseudotile = true;
         preserve_split = true;

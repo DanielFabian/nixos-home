@@ -19,6 +19,7 @@
     ../../modules/firmware/flatpak.nix
     ../../modules/desktop/hyprland.nix
     ../../modules/desktop/plasma.nix # fallback DE
+    ../../modules/desktop/cosmic.nix # System76 DE (alpha)
     ../../modules/users/dany.nix
   ];
 
