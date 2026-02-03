@@ -12,7 +12,7 @@
             "extensions": [
                 "jnoortheen.nix-ide",
                 "mhutchie.git-graph",
-                "kdl-org.kdl"
+                "kdl-org.kdl-v1"
             ],
             "settings": {
                 "nix.enableLanguageServer": true,
