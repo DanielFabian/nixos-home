@@ -10,7 +10,7 @@
   # Niri config in KDL format
   # Using force to handle existing files, and ensuring directory exists
   xdg.configFile."niri/config.kdl" = {
-    force = true;
+    force = false;
     text = ''
       // Niri configuration - scrollable tiling compositor
       // Docs: https://github.com/YaLTeR/niri/wiki/Configuration
