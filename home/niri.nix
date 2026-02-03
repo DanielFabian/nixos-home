@@ -159,7 +159,7 @@
           match app-id="^code$"
           match app-id="^Code$"
           match app-id="^code-url-handler$"
-          open-maximized true
+          open-fullscreen true
       }
     '';
   };
