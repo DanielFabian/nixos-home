@@ -155,12 +155,13 @@
           clip-to-geometry true
       }
 
-      // VS Code opens maximized (fullscreen column)
+      // VS Code main window opens maximized
+      // Main window has " - Visual Studio Code" in title, popups don't
       window-rule {
-          match app-id="^code$"
-          match app-id="^Code$"
-          match app-id="^code-url-handler$"
-          open-fullscreen true
+          match app-id="^code" title=" - Visual Studio Code$"
+          match app-id="^Code" title=" - Visual Studio Code$"
+          match app-id="^code-url-handler" title=" - Visual Studio Code$"
+          open-maximized true
       }
     '';
   };
