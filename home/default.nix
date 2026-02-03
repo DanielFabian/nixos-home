@@ -1,5 +1,10 @@
 # Home Manager configuration for dany
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   imports = [
@@ -8,6 +13,7 @@
     ./terminal.nix
     ./keyboard.nix
     ./hyprland.nix
+    ./niri.nix
     ./apps.nix
   ];
 
@@ -28,7 +34,7 @@
     enable = true;
     settings = {
       user.name = "Daniel Fabian";
-      user.email = "daniel.fabian@integral-it.ch";  # update if changed
+      user.email = "daniel.fabian@integral-it.ch"; # update if changed
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;

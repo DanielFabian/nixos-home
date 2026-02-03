@@ -9,16 +9,19 @@
   };
 
   # Niri will appear as a session option in greetd
-  # Config goes in ~/.config/niri/config.kdl (managed manually or via home-manager)
+  # Config goes in ~/.config/niri/config.kdl (home-manager manages it)
 
-  # Add some useful utilities for niri
+  # Add niri utilities and dependencies
   environment.systemPackages = with pkgs; [
     # Niri-specific tools
     nirius # utility commands for niri
 
-    # Already have these from hyprland, but good to list
-    waybar
-    wofi
-    mako
+    # Screen locker (niri default)
+    swaylock
+
+    # We reuse from hyprland: foot, wofi, waybar, mako
   ];
+
+  # Swaylock needs PAM
+  security.pam.services.swaylock = { };
 }
