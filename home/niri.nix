@@ -12,20 +12,20 @@
   xdg.configFile."niri/config.kdl" = {
     force = true;
     text = ''
-        // Niri configuration - scrollable tiling compositor
-        // Docs: https://github.com/YaLTeR/niri/wiki/Configuration
+      // Niri configuration - scrollable tiling compositor
+      // Docs: https://github.com/YaLTeR/niri/wiki/Configuration
 
-        input {
-            keyboard {
-                xkb {
-                    layout "gb"
-                    variant "colemak_dh"
-                    options "caps:escape"
-                }
-            }
+      input {
+          keyboard {
+              xkb {
+                  layout "gb"
+                  variant "colemak_dh"
+                  options "caps:escape"
+              }
+          }
 
-            touchpad {
-                tap
+          touchpad {
+              tap
               natural-scroll
               accel-speed 0.2
           }
@@ -33,6 +33,9 @@
           mouse {
               accel-speed 0.0
           }
+
+          // Focus follows mouse (won't scroll view, just follows within visible)
+          focus-follows-mouse max-scroll-amount="0%"
       }
 
       output "eDP-1" {
@@ -41,15 +44,23 @@
 
       layout {
           gaps 10
-          center-focused-column "never"
+
+          // Center single windows at 75% width
+          center-focused-column "on-overflow"
+          always-center-single-column
+
+          // Allow workspaces to grow upwards too
+          empty-workspace-above-first
 
           preset-column-widths {
               proportion 0.33333
               proportion 0.5
               proportion 0.66667
+              proportion 0.75
           }
 
-          default-column-width { proportion 0.5; }
+          // Default to 75% for single windows
+          default-column-width { proportion 0.75; }
 
           focus-ring {
               width 2
@@ -77,6 +88,9 @@
           Ctrl+Alt+BackSpace { quit; }  // old school zap
           Mod+L { spawn "swaylock"; }
 
+          // Float/unfloat
+          Mod+G { toggle-window-floating; }
+
           // Focus movement (Colemak-DH: mnei = hjkl positions)
           Mod+M { focus-column-left; }
           Mod+N { focus-window-down; }
@@ -93,7 +107,7 @@
           Mod+Minus { set-column-width "-10%"; }
           Mod+Equal { set-column-width "+10%"; }
 
-          // Workspaces
+          // Workspaces (vertical = contexts)
           Mod+1 { focus-workspace 1; }
           Mod+2 { focus-workspace 2; }
           Mod+3 { focus-workspace 3; }
@@ -115,7 +129,7 @@
           Mod+Shift+8 { move-column-to-workspace 8; }
           Mod+Shift+9 { move-column-to-workspace 9; }
 
-          // Scroll through workspaces
+          // Scroll through workspaces (up/down through contexts)
           Mod+Page_Down { focus-workspace-down; }
           Mod+Page_Up { focus-workspace-up; }
 
@@ -123,9 +137,9 @@
           Mod+F { maximize-column; }
           Mod+Shift+F { fullscreen-window; }
 
-          // Consume/expel from column
-          Mod+BracketLeft { consume-window-into-column; }
-          Mod+BracketRight { expel-window-from-column; }
+          // Consume/expel - directional (much clearer!)
+          Mod+BracketLeft { consume-or-expel-window-left; }
+          Mod+BracketRight { consume-or-expel-window-right; }
 
           // Screenshot
           Print { screenshot; }
@@ -133,10 +147,18 @@
           Ctrl+Print { screenshot-screen; }
       }
 
-      // Window rules
+      // Window rules - defaults
       window-rule {
           geometry-corner-radius 8
           clip-to-geometry true
+      }
+
+      // VS Code opens maximized (fullscreen column)
+      window-rule {
+          match app-id="^code$"
+          match app-id="^Code$"
+          match app-id="^code-url-handler$"
+          open-maximized true
       }
     '';
   };
