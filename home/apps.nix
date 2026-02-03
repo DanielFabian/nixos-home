@@ -7,42 +7,36 @@
     # Communication (Flatpak probably better for these, but here for reference)
     # discord
     # slack
-    
+
     # Media
     # spotify  # use flatpak
     mpv
-    
+
     # File management
-    yazi      # terminal file manager (modern ranger/vifm)
-    
+    yazi # terminal file manager (modern ranger/vifm)
+
     # System monitoring
     btop
-    
+
     # Development - general tools
     jq
     yq
     httpie
-    
+
     # Docker/container tools
-    dive      # explore docker images
+    dive # explore docker images
     lazydocker
-    
+
     # Cloud CLI tools
     # azure-cli  # use devcontainer for cloud stuff
-    
+
     # Misc
     neofetch
     fastfetch
   ];
 
-  # VS Code from unstable - let it self-manage extensions
-  programs.vscode = {
-    enable = true;
-    package = pkgs.unstable.vscode;
-    # Don't manage extensions via Nix - let VS Code handle it
-    # The devcontainer philosophy: VS Code is just a frontend
-    mutableExtensionsDir = true;
-  };
+  # VS Code now managed via flatpak (see modules/firmware/flatpak.nix)
+  # Flatpak VS Code uses portal secrets properly
 
   # Browser - Firefox from unstable
   programs.firefox = {

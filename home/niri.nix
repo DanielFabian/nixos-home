@@ -157,10 +157,10 @@
 
       // VS Code main window opens maximized
       // Main window has " - Visual Studio Code" in title, popups don't
+      // Matches both flatpak (com.visualstudio.code) and native
       window-rule {
-          match app-id="^code" title=" - Visual Studio Code$"
-          match app-id="^Code" title=" - Visual Studio Code$"
-          match app-id="^code-url-handler" title=" - Visual Studio Code$"
+          match app-id="code" title=" - Visual Studio Code$"
+          match app-id="com.visualstudio.code" title=" - Visual Studio Code$"
           open-maximized true
       }
     '';
