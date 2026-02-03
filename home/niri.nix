@@ -155,13 +155,11 @@
           clip-to-geometry true
       }
 
-      // VS Code main window opens maximized
-      // Main window has " - Visual Studio Code" in title, popups don't
-      // Matches both flatpak (com.visualstudio.code) and native
+      // VS Code main window opens fullscreen
+      // Main window has "filename - Visual Studio Code" in title, popups just "Visual Studio Code"
       window-rule {
           match app-id="code" title=" - Visual Studio Code$"
-          match app-id="com.visualstudio.code" title=" - Visual Studio Code$"
-          open-maximized true
+          open-fullscreen true
       }
     '';
   };
