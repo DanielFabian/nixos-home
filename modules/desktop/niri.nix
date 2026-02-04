@@ -8,7 +8,7 @@
     useNautilus = true; # Use GNOME portal infrastructure (OpenURI, file dialogs)
   };
 
-  # Niri will appear as a session option in greetd
+  # Niri will appear as a session option in GDM
   # Config goes in ~/.config/niri/config.kdl (home-manager manages it)
 
   # Secrets service (VS Code, etc need this)
@@ -30,7 +30,4 @@
 
   # Swaylock needs PAM
   security.pam.services.swaylock = { };
-
-  # PAM integration for gnome-keyring auto-unlock at login
-  security.pam.services.greetd.enableGnomeKeyring = true;
 }

@@ -6,14 +6,21 @@
   # GNOME desktop manager
   services.desktopManager.gnome.enable = true;
 
+  # GDM display manager - shows all available sessions (niri, Hyprland, GNOME, etc.)
+  services.xserver.displayManager.gdm = {
+    enable = true;
+    wayland = true;
+  };
+
+  # Keyring auto-unlock at login
+  security.pam.services.gdm.enableGnomeKeyring = true;
+
   # GNOME pulls in:
   # - xdg-desktop-portal-gnome (OpenURI, FileChooser, etc.)
   # - gnome-keyring (secrets)
   # - gsettings/dconf (app settings)
   # - nautilus (file dialogs)
   # This makes Flatpak apps "just work"
-
-  # Can select "GNOME" or "GNOME Classic" from greetd
 
   # Exclude some GNOME apps we don't need (niri has its own stack)
   environment.gnome.excludePackages = with pkgs; [
