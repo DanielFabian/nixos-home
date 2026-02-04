@@ -18,9 +18,9 @@
     ../../modules/firmware/networking.nix
     ../../modules/firmware/flatpak.nix
     ../../modules/desktop/hyprland.nix
-    ../../modules/desktop/plasma.nix # fallback DE
+    ../../modules/desktop/gnome.nix # fallback DE + portal infrastructure
     ../../modules/desktop/cosmic.nix # System76 DE (alpha)
-    ../../modules/desktop/niri.nix # scrollable-tiling WM
+    ../../modules/desktop/niri.nix # scrollable-tiling WM (primary)
     ../../modules/users/dany.nix
   ];
 

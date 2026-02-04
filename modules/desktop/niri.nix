@@ -5,7 +5,7 @@
   # Enable Niri compositor
   programs.niri = {
     enable = true;
-    useNautilus = false; # we're not using GNOME stack
+    useNautilus = true; # Use GNOME portal infrastructure (OpenURI, file dialogs)
   };
 
   # Niri will appear as a session option in greetd
