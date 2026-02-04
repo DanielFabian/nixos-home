@@ -3,7 +3,7 @@
 { config, pkgs, ... }:
 
 {
-  # XDG portals - GNOME desktop manager handles this, just ensure xdg-open uses portal
+  # XDG portals - Plasma desktop handles this, just ensure xdg-open uses portal
   xdg.portal.xdgOpenUsePortal = true;
 
   # Enable flatpak daemon

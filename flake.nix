@@ -29,6 +29,18 @@
     # Declarative flatpak management
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
 
+    # DankMaterialShell - Quickshell-based desktop shell
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell/stable";
+      inputs.nixpkgs.follows = "nixpkgs-unstable"; # DMS needs unstable
+    };
+
+    # dgop for DMS system monitoring (not in stable nixpkgs)
+    dgop = {
+      url = "github:AvengeMedia/dgop";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     # Hyprland - track their flake for freshness
     hyprland.url = "github:hyprwm/Hyprland";
   };
@@ -42,6 +54,8 @@
       disko,
       lanzaboote,
       nix-flatpak,
+      dms,
+      dgop,
       hyprland,
       ...
     }@inputs:

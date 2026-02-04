@@ -44,7 +44,13 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 
 **Hyprland keybinds**: Using vim-style navigation mapped to Colemak-DH physical positions (mnei instead of hjkl).
 
-**Portals / URL opening**: Flatpak VS Code opening URLs depends on xdg-desktop-portal providing the OpenURI interface. If the portal backend doesn’t implement OpenURI (or no backend is selected), `xdg-open`/VS Code link opening can no-op or error. Fix is to enable `xdg.portal` globally and force an OpenURI-capable backend (`xdg-desktop-portal-gtk`) via `xdg.portal.config.common.default = [ "gtk" ]`.
+**Desktop stack** (2026-02-04): After trying GNOME (known bugs, OpenURI broken), settled on:
+- **Plasma 6** as the full desktop stack with SDDM display manager - provides working portals (xdg-desktop-portal-kde), kwallet, file dialogs
+- **niri** as the primary WM - appears in SDDM session picker
+- **DankMaterialShell** (DMS) - Quickshell-based desktop shell for niri, provides panel/notifications/launcher
+- VS Code + Discord + Edge as Flatpaks (portal secrets work with KDE stack)
+
+Note: DMS niri integration module requires niri-flake's home-manager module. We use system-level niri from nixpkgs, so DMS niri module is skipped. DMS starts via systemd user service instead.
 
 **Display**: 4K @ 1.5x scale (Hyprland)
 

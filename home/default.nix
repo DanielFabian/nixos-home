@@ -14,6 +14,7 @@
     ./keyboard.nix
     ./hyprland.nix
     ./niri.nix
+    ./dms.nix # DankMaterialShell for niri
     ./apps.nix
   ];
 

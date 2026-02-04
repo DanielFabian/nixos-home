@@ -5,14 +5,11 @@
   # Enable Niri compositor
   programs.niri = {
     enable = true;
-    useNautilus = true; # Use GNOME portal infrastructure (OpenURI, file dialogs)
+    useNautilus = false; # We use KDE portals (Dolphin for file dialogs)
   };
 
-  # Niri will appear as a session option in GDM
-  # Config goes in ~/.config/niri/config.kdl (home-manager manages it)
-
-  # Secrets service (VS Code, etc need this)
-  services.gnome.gnome-keyring.enable = true;
+  # Niri will appear as a session option in SDDM
+  # Config goes in ~/.config/niri/config.kdl (DMS manages it via includes)
 
   # Add niri utilities and dependencies
   environment.systemPackages = with pkgs; [
@@ -25,7 +22,8 @@
     # Keyring UI (if needed)
     seahorse
 
-    # We reuse from hyprland: foot, wofi, waybar, mako
+    # DMS provides: waybar-like panel, notifications, launcher
+    # We still keep foot terminal from hyprland config
   ];
 
   # Swaylock needs PAM
