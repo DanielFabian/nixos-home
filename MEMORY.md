@@ -44,13 +44,22 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 
 **Hyprland keybinds**: Using vim-style navigation mapped to Colemak-DH physical positions (mnei instead of hjkl).
 
-**Desktop stack** (2026-02-04): After trying GNOME (known bugs, OpenURI broken), settled on:
-- **Plasma 6** as the full desktop stack with SDDM display manager - provides working portals (xdg-desktop-portal-kde), kwallet, file dialogs
-- **niri** as the primary WM - appears in SDDM session picker
-- **DankMaterialShell** (DMS) - Quickshell-based desktop shell for niri, provides panel/notifications/launcher
-- VS Code + Discord + Edge as Flatpaks (portal secrets work with KDE stack)
+**Desktop stack - DEBUGGING** (2026-02-04): 
+Stripped to minimal niri to debug OpenURI portal issue:
+- greetd → niri-session directly (no SDDM, no Plasma, no GNOME, no Cosmic)
+- `programs.niri` from nixpkgs handles portals (portal-gnome for screencast, portal-gtk for files)
+- foot, fuzzel, swaylock, wl-clipboard as essentials
 
-Note: DMS niri integration module requires niri-flake's home-manager module. We use system-level niri from nixpkgs, so DMS niri module is skipped. DMS starts via systemd user service instead.
+**Portal debugging symptom**: OpenURI works under Plasma, broken under GNOME alone, works under niri only with both Plasma+GNOME installed. Suggests portal routing issue.
+
+Debug commands to run after rebuild:
+```bash
+systemctl --user list-units 'xdg-desktop-portal*'
+cat /etc/xdg/xdg-desktop-portal/*.conf 2>/dev/null
+ls -la /etc/xdg/xdg-desktop-portal/
+echo $XDG_CURRENT_DESKTOP
+gdbus call --session --dest org.freedesktop.portal.Desktop --object-path /org/freedesktop/portal/desktop --method org.freedesktop.portal.OpenURI.OpenURI "" "https://google.com" {}
+```
 
 **Display**: 4K @ 1.5x scale (Hyprland)
 
