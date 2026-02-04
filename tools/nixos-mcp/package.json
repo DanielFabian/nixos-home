@@ -14,7 +14,7 @@
         "smoke": "node scripts/smoke.mjs"
     },
     "dependencies": {
-        "@modelcontextprotocol/sdk": "^1.0.0"
+        "@modelcontextprotocol/sdk": "^1.26.0"
     },
     "engines": {
         "node": ">=20"
