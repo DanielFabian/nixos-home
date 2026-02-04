@@ -3,6 +3,15 @@
 { config, pkgs, ... }:
 
 {
+  # XDG portals are required for Flatpak apps (incl. VS Code) to open URLs,
+  # show file pickers, etc. Ensure a backend that supports OpenURI.
+  xdg.portal = {
+    enable = true;
+    xdgOpenUsePortal = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.common.default = [ "gtk" ];
+  };
+
   # Enable flatpak daemon
   services.flatpak = {
     enable = true;
@@ -57,9 +66,6 @@
       };
     };
   };
-
-  # XDG portal improvements for FHS apps
-  xdg.portal.xdgOpenUsePortal = true;
 
   # System-wide flatpak management GUI (optional)
   environment.systemPackages = with pkgs; [

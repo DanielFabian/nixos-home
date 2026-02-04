@@ -44,6 +44,8 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 
 **Hyprland keybinds**: Using vim-style navigation mapped to Colemak-DH physical positions (mnei instead of hjkl).
 
+**Portals / URL opening**: Flatpak VS Code opening URLs depends on xdg-desktop-portal providing the OpenURI interface. If the portal backend doesn’t implement OpenURI (or no backend is selected), `xdg-open`/VS Code link opening can no-op or error. Fix is to enable `xdg.portal` globally and force an OpenURI-capable backend (`xdg-desktop-portal-gtk`) via `xdg.portal.config.common.default = [ "gtk" ]`.
+
 **Display**: 4K @ 1.5x scale (Hyprland)
 
 **Confirmed hardware**:
