@@ -9,8 +9,20 @@
     enable = true;
     xdgOpenUsePortal = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    config.common.default = [ "gtk" ];
+    config.common = {
+      default = [ "gtk" ];
+      # Be explicit: route the OpenURI interface to the GTK backend.
+      # (The key is the *impl* interface name; see portals.conf(5)).
+      "org.freedesktop.impl.portal.OpenURI" = [ "gtk" ];
+    };
   };
+
+  # Make sure portal + backends are discoverable for D-Bus activation.
+  # (Without this, org.freedesktop.portal.Desktop may start without OpenURI.)
+  services.dbus.packages = with pkgs; [
+    xdg-desktop-portal
+    xdg-desktop-portal-gtk
+  ];
 
   # Enable flatpak daemon
   services.flatpak = {
