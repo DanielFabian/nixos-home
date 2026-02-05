@@ -218,4 +218,26 @@
       }
     '';
   };
+
+  # Hyprland-specific tools (referenced in config above)
+  home.packages = with pkgs; [
+    # Screenshots (keybinds use these)
+    grim
+    slurp
+
+    # Screen recording
+    wf-recorder
+
+    # Notifications
+    mako
+
+    # App launcher
+    wofi
+
+    # Network tray
+    networkmanagerapplet
+
+    # Display config
+    wlr-randr
+  ];
 }

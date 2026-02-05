@@ -12,6 +12,7 @@
     ./editor.nix
     ./terminal.nix
     ./keyboard.nix
+    ./theme.nix # GTK/Qt dark theme
     ./hyprland.nix
     ./niri.nix
     ./dms.nix # DankMaterialShell for niri

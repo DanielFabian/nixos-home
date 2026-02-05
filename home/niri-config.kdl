@@ -2,6 +2,9 @@
 // Docs: https://github.com/YaLTeR/niri/wiki/Configuration
 // This file is symlinked - edit directly and reload niri (Mod+Shift+Q or niri msg reload)
 
+// DMS (DankMaterialShell) starts via systemd graphical-session.target
+// nm-applet also starts via systemd (if enabled)
+
 input {
     keyboard {
         xkb {
@@ -60,17 +63,11 @@ layout {
     }
 }
 
-// Spawn commands
-spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets,pkcs11"
-spawn-at-startup "waybar"
-spawn-at-startup "mako"
-spawn-at-startup "nm-applet" "--indicator"
-
 // Hotkey bindings - using Mod (Super)
 binds {
     // Core actions
     Mod+Return { spawn "foot"; }
-    Mod+D { spawn "wofi" "--show" "drun"; }
+    Mod+D { spawn "fuzzel"; }
     Mod+Q { close-window; }
     Mod+Shift+Q { quit; }
     Ctrl+Alt+BackSpace { quit; }  // old school zap
