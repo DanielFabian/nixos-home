@@ -44,13 +44,19 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 
 **Hyprland keybinds**: Using vim-style navigation mapped to Colemak-DH physical positions (mnei instead of hjkl).
 
-**Desktop stack** (2026-02-04): After trying GNOME (known bugs, OpenURI broken), settled on:
-- **Plasma 6** as the full desktop stack with SDDM display manager - provides working portals (xdg-desktop-portal-kde), kwallet, file dialogs
-- **niri** as the primary WM - appears in SDDM session picker
-- **DankMaterialShell** (DMS) - Quickshell-based desktop shell for niri, provides panel/notifications/launcher
-- VS Code + Discord + Edge as Flatpaks (portal secrets work with KDE stack)
+**Desktop stack - DEBUGGING** (2026-02-04): 
+Stripped to minimal niri to debug OpenURI portal issue:
+- greetd → niri-session directly (no SDDM, no Plasma, no GNOME, no Cosmic)
+- `programs.niri` from nixpkgs handles portals (portal-gnome for screencast, portal-gtk for files)
+- Added portal-kde for OpenURI routing (explicit in `xdg.portal.config.niri`)
+- foot, fuzzel, swaylock, wl-clipboard as essentials
 
-Note: DMS niri integration module requires niri-flake's home-manager module. We use system-level niri from nixpkgs, so DMS niri module is skipped. DMS starts via systemd user service instead.
+**Portal bug ROOT CAUSE FOUND** (2026-02-05):
+Home-manager's hyprland module auto-enables `xdg.portal`, which sets `NIX_XDG_DESKTOP_PORTAL_DIR` to user profile path. But portal packages are at system level. The portal daemon couldn't find any `.portal` files.
+
+Fix: Set `wayland.windowManager.hyprland.portalPackage = null` in home-manager config.
+
+Key insight: **OpenURI is built into xdg-desktop-portal itself** (uses GLib's `g_app_info_get_default_for_uri_scheme`), not in any backend portal. The backends only provide AppChooser dialog. But if the portal can't find *any* backends, it doesn't expose the interface at all.
 
 **Display**: 4K @ 1.5x scale (Hyprland)
 

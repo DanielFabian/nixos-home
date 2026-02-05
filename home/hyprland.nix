@@ -12,6 +12,10 @@
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     systemd.enable = true; # integrate with systemd user session
 
+    # Portal is managed at NixOS level, not home-manager
+    # This prevents HM from overwriting NIX_XDG_DESKTOP_PORTAL_DIR
+    portalPackage = null;
+
     settings = {
       "$mod" = "SUPER";
       "$terminal" = "foot";
