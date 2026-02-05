@@ -120,6 +120,10 @@
         "$mod, P, pseudo"
         "$mod, S, togglesplit"
 
+        # Layout toggle (dwindle = BSP tree, master = 1+N stack)
+        "$mod, T, exec, hyprctl keyword general:layout dwindle"
+        "$mod SHIFT, T, exec, hyprctl keyword general:layout master"
+
         # Focus movement (mnei)
         "$mod, m, movefocus, l"
         "$mod, n, movefocus, d"
