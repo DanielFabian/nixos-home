@@ -48,18 +48,15 @@ Key invariant: ZFS snapshots as first-class rollback for *everything* (system st
 Stripped to minimal niri to debug OpenURI portal issue:
 - greetd → niri-session directly (no SDDM, no Plasma, no GNOME, no Cosmic)
 - `programs.niri` from nixpkgs handles portals (portal-gnome for screencast, portal-gtk for files)
+- Added portal-kde for OpenURI routing (explicit in `xdg.portal.config.niri`)
 - foot, fuzzel, swaylock, wl-clipboard as essentials
 
-**Portal debugging symptom**: OpenURI works under Plasma, broken under GNOME alone, works under niri only with both Plasma+GNOME installed. Suggests portal routing issue.
+**Portal bug ROOT CAUSE FOUND** (2026-02-05):
+Home-manager's hyprland module auto-enables `xdg.portal`, which sets `NIX_XDG_DESKTOP_PORTAL_DIR` to user profile path. But portal packages are at system level. The portal daemon couldn't find any `.portal` files.
 
-Debug commands to run after rebuild:
-```bash
-systemctl --user list-units 'xdg-desktop-portal*'
-cat /etc/xdg/xdg-desktop-portal/*.conf 2>/dev/null
-ls -la /etc/xdg/xdg-desktop-portal/
-echo $XDG_CURRENT_DESKTOP
-gdbus call --session --dest org.freedesktop.portal.Desktop --object-path /org/freedesktop/portal/desktop --method org.freedesktop.portal.OpenURI.OpenURI "" "https://google.com" {}
-```
+Fix: Set `wayland.windowManager.hyprland.portalPackage = null` in home-manager config.
+
+Key insight: **OpenURI is built into xdg-desktop-portal itself** (uses GLib's `g_app_info_get_default_for_uri_scheme`), not in any backend portal. The backends only provide AppChooser dialog. But if the portal can't find *any* backends, it doesn't expose the interface at all.
 
 **Display**: 4K @ 1.5x scale (Hyprland)
 
