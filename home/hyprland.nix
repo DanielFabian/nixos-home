@@ -1,4 +1,5 @@
 # Hyprland user configuration
+# Dwindle layout, DMS shell, transparent foot
 {
   config,
   pkgs,
@@ -19,10 +20,9 @@
     settings = {
       "$mod" = "SUPER";
       "$terminal" = "foot";
-      "$menu" = "wofi --show drun";
+      "$menu" = "fuzzel";
 
       # Monitor config - 4K at 1.5x scale for 15" display
-      # Use `hyprctl monitors` to see connected displays, adjust as needed
       monitor = [ ",preferred,auto,1.5" ];
 
       # General appearance
@@ -30,17 +30,18 @@
         gaps_in = 5;
         gaps_out = 10;
         border_size = 2;
-        "col.active_border" = "rgba(7aa2f7ff)"; # Tokyo Night blue
+        "col.active_border" = "rgba(670061ff)";
         "col.inactive_border" = "rgba(414868ff)";
         layout = "dwindle";
       };
 
       decoration = {
-        rounding = 8;
+        rounding = 20;
         blur = {
           enabled = true;
-          size = 5;
-          passes = 2;
+          size = 8;
+          passes = 3;
+          new_optimizations = true;
         };
         shadow = {
           enabled = true;
@@ -60,23 +61,31 @@
         ];
       };
 
-      # Touchpad configuration
+      # Input - match niri
       input = {
+        kb_layout = "gb";
+        kb_variant = "colemak_dh";
+        kb_options = "caps:escape";
+
         touchpad = {
           natural_scroll = true;
           tap-to-click = true;
+          clickfinger_behavior = true; # 2-finger tap = right click
           drag_lock = false;
           disable_while_typing = true;
         };
+
+        follow_mouse = 1;
+        sensitivity = 0;
       };
 
       # Trackpad gestures
       gesture = [
-        "3, horizontal, workspace" # 3-finger swipe for workspace
-        "3, up, fullscreen" # 3-finger up for fullscreen
-        "3, down, fullscreen" # 3-finger down to exit fullscreen (toggle)
-        "4, horizontal, workspace" # 4-finger swipe also works
-        "4, down, special" # 4-finger down for scratchpad
+        "3, horizontal, workspace"
+        "3, up, fullscreen"
+        "3, down, fullscreen"
+        "4, horizontal, workspace"
+        "4, down, special"
       ];
 
       dwindle = {
@@ -84,22 +93,34 @@
         preserve_split = true;
       };
 
-      # Keybindings - vim-style (adapted for Colemak-DH)
-      # NOTE: Colemak-DH moves hjkl → neio or mnei depending on philosophy
-      # Using physical position (qwerty hjkl = colemak mnei)
+      # Window rules
+      windowrule = [
+        "opacity 0.75 0.65, match:class foot"
+      ];
+
+      # No CSD
+      misc = {
+        disable_hyprland_logo = true;
+        disable_splash_rendering = true;
+        force_default_wallpaper = 0;
+      };
+
+      # Keybindings - Colemak-DH (mnei = hjkl)
       bind = [
         # Core actions
         "$mod, Return, exec, $terminal"
         "$mod, D, exec, $menu"
         "$mod, Q, killactive"
-        "$mod SHIFT, E, exit"
-        "CTRL ALT, BackSpace, exit" # old school zap
+        "$mod SHIFT, Q, exit"
+        "CTRL ALT, BackSpace, exit"
+        "$mod, L, exec, swaylock"
         "$mod, V, togglefloating"
+        "$mod, G, togglefloating"
         "$mod, F, fullscreen"
-        "$mod, P, pseudo" # dwindle
-        "$mod, S, togglesplit" # dwindle
+        "$mod, P, pseudo"
+        "$mod, S, togglesplit"
 
-        # Focus movement (vim hjkl positions on Colemak-DH → m n e i)
+        # Focus movement (mnei)
         "$mod, m, movefocus, l"
         "$mod, n, movefocus, d"
         "$mod, e, movefocus, u"
@@ -139,6 +160,10 @@
         "$mod SHIFT, 8, movetoworkspace, 8"
         "$mod SHIFT, 9, movetoworkspace, 9"
 
+        # Scroll through workspaces
+        "$mod, Page_Down, workspace, +1"
+        "$mod, Page_Up, workspace, -1"
+
         # Scratchpad
         "$mod, grave, togglespecialworkspace"
         "$mod SHIFT, grave, movetoworkspace, special"
@@ -154,88 +179,24 @@
         "$mod, mouse:273, resizewindow"
       ];
 
-      # Startup
+      # Startup - DMS starts via systemd graphical-session.target
       exec-once = [
         "gnome-keyring-daemon --start --components=secrets,pkcs11"
-        "waybar"
-        "mako"
-        "nm-applet --indicator" # wifi tray icon
-        # Set wallpaper - TODO: integrate with wallpaper rotation
-        # "swaybg -i ~/wallpapers/current.png -m fill"
       ];
     };
   };
 
-  # Waybar config
-  programs.waybar = {
-    enable = true;
-    settings = {
-      mainBar = {
-        layer = "top";
-        position = "top";
-        height = 30;
-        modules-left = [
-          "hyprland/workspaces"
-          "hyprland/window"
-        ];
-        modules-center = [ "clock" ];
-        modules-right = [
-          "cpu"
-          "memory"
-          "network"
-          "battery"
-          "tray"
-        ];
-
-        clock = {
-          format = "{:%Y-%m-%d %H:%M}";
-          tooltip-format = "{:%A, %B %d, %Y}";
-        };
-
-        cpu.format = "CPU {usage}%";
-        memory.format = "MEM {}%";
-        battery = {
-          format = "BAT {capacity}%";
-          format-charging = "CHG {capacity}%";
-        };
-      };
-    };
-    style = ''
-      * {
-        font-family: "JetBrainsMono Nerd Font";
-        font-size: 13px;
-      }
-      window#waybar {
-        background: rgba(26, 27, 38, 0.9);
-        color: #c0caf5;
-      }
-      #workspaces button {
-        color: #c0caf5;
-        padding: 0 5px;
-      }
-      #workspaces button.active {
-        color: #7aa2f7;
-      }
-    '';
-  };
-
-  # Hyprland-specific tools (referenced in config above)
+  # Hyprland-specific tools
   home.packages = with pkgs; [
-    # Screenshots (keybinds use these)
+    # Screenshots
     grim
     slurp
 
     # Screen recording
     wf-recorder
 
-    # Notifications
-    mako
-
     # App launcher
-    wofi
-
-    # Network tray
-    networkmanagerapplet
+    fuzzel
 
     # Display config
     wlr-randr
