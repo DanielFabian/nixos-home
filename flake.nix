@@ -43,12 +43,6 @@
 
     # Hyprland - track their flake for freshness
     hyprland.url = "github:hyprwm/Hyprland";
-
-    # Official Hyprland plugins (hyprscrolling, hyprbars, etc.)
-    hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
-      inputs.hyprland.follows = "hyprland";
-    };
   };
 
   outputs =
@@ -63,7 +57,6 @@
       dms,
       dgop,
       hyprland,
-      hyprland-plugins,
       ...
     }@inputs:
     let
