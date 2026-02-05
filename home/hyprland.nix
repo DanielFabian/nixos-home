@@ -34,7 +34,7 @@
       general = {
         gaps_in = 5;
         gaps_out = 10;
-        border_size = 0; # no border, using focus ring colors via plugin
+        border_size = 2;
         "col.active_border" = "rgba(670061ff)";
         "col.inactive_border" = "rgba(414868ff)";
         layout = "scrolling";
@@ -97,6 +97,19 @@
         };
       };
 
+      # Touchpad gestures
+      gestures = {
+        workspace_swipe_touch = true;
+      };
+
+      gesture = [
+        "3, horizontal, workspace" # 3-finger swipe for workspace
+        "3, up, fullscreen" # 3-finger up for fullscreen
+        "3, down, fullscreen" # 3-finger down to exit fullscreen
+        "4, horizontal, workspace" # 4-finger swipe also works
+        "4, down, special" # 4-finger down for scratchpad
+      ];
+
       # No CSD
       misc = {
         disable_hyprland_logo = true;
@@ -105,9 +118,9 @@
       };
 
       # Window rules - match niri
-      windowrulev2 = [
+      windowrule = [
         # Transparent foot terminal (blur shows through)
-        "opacity 0.75 0.65, class:^(foot)$"
+        "opacity 0.75 0.65, match:class foot"
       ];
 
       # Keybindings - Colemak-DH (mnei = hjkl)
