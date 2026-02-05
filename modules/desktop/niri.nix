@@ -1,37 +1,22 @@
 # Niri - Scrollable-tiling Wayland compositor
-# Spartan setup for portal debugging
 { config, pkgs, ... }:
 
 {
-  # Enable Niri compositor (nixpkgs module handles base portals)
+  # Enable Niri compositor
+  # nixpkgs module sets up: portal-gnome (screencast), portal-gtk (files), gnome-keyring
+  # OpenURI is built into xdg-desktop-portal itself (no backend needed)
   programs.niri = {
     enable = true;
-    useNautilus = false; # Use GTK portal for file dialogs
+    useNautilus = false; # Use GTK portal for file dialogs (lighter than Nautilus)
   };
 
-  # FIX: portal-gnome doesn't implement OpenURI, only portal-kde does
-  xdg.portal = {
-    extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
-    config.niri = {
-      # KDE portal for OpenURI (the only one that implements it!)
-      "org.freedesktop.impl.portal.OpenURI" = "kde";
-      # GTK for file dialogs (already set by programs.niri, but be explicit)
-      "org.freedesktop.impl.portal.FileChooser" = "gtk";
-      # Fallback
-      default = [
-        "kde"
-        "gtk"
-      ];
-    };
-  };
-
-  # Minimal login manager
+  # Login manager - greetd is minimal, launches niri-session directly
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
         command = "${pkgs.niri}/bin/niri-session";
-        user = "dany";
+        user = "dany"; # TODO: make configurable
       };
     };
   };

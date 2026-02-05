@@ -17,10 +17,9 @@
     ../../modules/firmware/virtualization.nix
     ../../modules/firmware/networking.nix
     ../../modules/firmware/flatpak.nix
-    # Disabled for portal debugging - spartan niri only
-    # ../../modules/desktop/hyprland.nix
-    # ../../modules/desktop/plasma.nix # full KDE stack + SDDM (portal infrastructure)
-    # ../../modules/desktop/cosmic.nix # System76 DE (alpha)
+    ../../modules/desktop/hyprland.nix
+    # ../../modules/desktop/plasma.nix # Not needed - portals work without full Plasma
+    # ../../modules/desktop/cosmic.nix # System76 DE (alpha) - disabled for now
     ../../modules/desktop/niri.nix # scrollable-tiling WM (primary)
     ../../modules/users/dany.nix
   ];
