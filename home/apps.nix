@@ -35,8 +35,13 @@
     fastfetch
   ];
 
-  # VS Code now managed via flatpak (see modules/firmware/flatpak.nix)
-  # Flatpak VS Code uses portal secrets properly
+  # VS Code from unstable - sees docker, native Wayland, fast updates
+  programs.vscode = {
+    enable = true;
+    package = pkgs.unstable.vscode;
+    # Extensions managed by VS Code itself (not Nix)
+    # mutableExtensionsDir = true; # default
+  };
 
   # Default applications (for xdg-open, portals, etc.)
   xdg.mimeApps = {
