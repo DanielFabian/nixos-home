@@ -5,6 +5,8 @@
 // DMS (DankMaterialShell) starts via systemd graphical-session.target
 // nm-applet also starts via systemd (if enabled)
 
+prefer-no-csd
+
 input {
     keyboard {
         xkb {
@@ -54,7 +56,7 @@ layout {
 
     focus-ring {
         width 2
-        active-color "#170061"
+        active-color "#670061"
         inactive-color "#414868"
     }
 
@@ -137,4 +139,9 @@ binds {
 window-rule {
     geometry-corner-radius 20
     clip-to-geometry true
+}
+
+window-rule {
+  match app-id="foot"
+  opacity 0.75
 }
