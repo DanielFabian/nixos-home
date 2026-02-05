@@ -18,6 +18,7 @@
     ../../modules/firmware/networking.nix
     ../../modules/firmware/flatpak.nix
     ../../modules/desktop/hyprland.nix
+    ../../modules/desktop/steam.nix # Gaming
     # ../../modules/desktop/plasma.nix # Not needed - portals work without full Plasma
     # ../../modules/desktop/cosmic.nix # System76 DE (alpha) - disabled for now
     ../../modules/desktop/niri.nix # scrollable-tiling WM (primary)

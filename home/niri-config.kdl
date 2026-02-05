@@ -2,6 +2,11 @@
 // Docs: https://github.com/YaLTeR/niri/wiki/Configuration
 // This file is symlinked - edit directly and reload niri (Mod+Shift+Q or niri msg reload)
 
+// Startup programs
+// spawn-at-startup "waybar"     // Disabled - using DMS instead
+spawn-at-startup "dms" "run" "--session"  // DankMaterialShell (panel, notifications, launcher)
+spawn-at-startup "nm-applet" "--indicator"  // Network tray
+
 input {
     keyboard {
         xkb {
@@ -64,7 +69,7 @@ layout {
 binds {
     // Core actions
     Mod+Return { spawn "foot"; }
-    Mod+D { spawn "wofi" "--show" "drun"; }
+    Mod+D { spawn "fuzzel"; }
     Mod+Q { close-window; }
     Mod+Shift+Q { quit; }
     Ctrl+Alt+BackSpace { quit; }  // old school zap

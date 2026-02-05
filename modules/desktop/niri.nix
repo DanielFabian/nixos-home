@@ -22,6 +22,9 @@
     };
   };
 
+  # dconf needed for GTK theming (dark mode preference)
+  programs.dconf.enable = true;
+
   # Config goes in ~/.config/niri/config.kdl
 
   # Session-critical packages only
