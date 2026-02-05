@@ -24,24 +24,18 @@
 
   # Config goes in ~/.config/niri/config.kdl
 
-  # Add niri utilities and dependencies
+  # Session-critical packages only
+  # Terminal, launcher, bar etc. are in home/ via programs.*
   environment.systemPackages = with pkgs; [
-    # Terminal (essential - can't recover without one)
-    foot
+    nirius # niri utility commands
 
-    # Niri-specific tools
-    nirius # utility commands for niri
-
-    # Screen locker (niri default)
+    # Screen locker
     swaylock
 
-    # App launcher
-    fuzzel
-
-    # Clipboard
+    # Clipboard (shared with hyprland)
     wl-clipboard
 
-    # Keyring UI (if needed)
+    # Keyring UI
     seahorse
   ];
 

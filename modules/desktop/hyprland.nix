@@ -14,46 +14,21 @@
     xwayland.enable = true;
   };
 
-  # XDG portal for screen sharing, file dialogs, etc
-  # Note: Hyprland flake handles xdg-desktop-portal-hyprland automatically
-  xdg.portal = {
-    enable = true;
-    # extraPortals managed by programs.hyprland when using the flake
-  };
+  # Portal setup - Hyprland flake handles portal-hyprland automatically
+  xdg.portal.enable = true;
 
-  # Recommended utilities (home-manager handles most config)
+  # Session-critical packages only (recovery, plumbing)
+  # User tools (waybar, mako, wofi) are in home/hyprland.nix via programs.*
   environment.systemPackages = with pkgs; [
-    # Wayland essentials
+    # Wayland plumbing
     wl-clipboard
-    wlr-randr
-
-    # Screenshots
-    grim
-    slurp
-
-    # Screen recording
-    wf-recorder
-
-    # Notification daemon
-    mako
-
-    # App launcher - wofi (wayland-native rofi alternative)
-    wofi
-
-    # Status bar (home-manager configures waybar)
-    waybar
-
-    # Qt Wayland support
     qt6.qtwayland
     libsForQt5.qt5.qtwayland
-
-    # Network manager tray applet
-    networkmanagerapplet
   ];
 
   # Polkit for authentication dialogs
   security.polkit.enable = true;
 
-  # Gnome keyring for secrets
-  services.gnome.gnome-keyring.enable = true;
+  # Secrets - let niri.nix handle this to avoid duplication
+  # services.gnome.gnome-keyring.enable is set by programs.niri
 }
