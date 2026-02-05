@@ -1,10 +1,18 @@
-# Display manager / greeter - COSMIC greeter
-# GPU-accelerated login screen with session picker, wallpaper, dark theme
+# Display manager / greeter - tuigreet (terminal-based, zero deps)
+# Picks up all installed wayland sessions automatically
 { config, pkgs, ... }:
 
 {
-  # COSMIC greeter (runs cosmic-comp for the login screen, uses greetd under the hood)
-  services.displayManager.cosmic-greeter.enable = true;
+  # greetd + tuigreet - lightweight, no compositor conflict
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
+        user = "greeter";
+      };
+    };
+  };
 
   # Shared session infrastructure
   programs.dconf.enable = true; # GTK theming (dark mode preference)
