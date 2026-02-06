@@ -5,6 +5,7 @@
 // Import Wayland env into systemd + dbus, then restart DMS if it crashed
 // (Mirrors Hyprland's exec-once pattern — must run inside compositor where WAYLAND_DISPLAY is set)
 spawn-at-startup "sh" "-c" "dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP && systemctl --user reset-failed dms.service 2>/dev/null; systemctl --user restart dms.service 2>/dev/null; true"
+spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets,pkcs11"
 
 prefer-no-csd
 
