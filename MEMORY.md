@@ -84,6 +84,16 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for layering model discussion.
 - Both compositors guarantee WAYLAND_DISPLAY is in systemd env before graphical-session.target activates. Services WantedBy=graphical-session.target (like DMS) will have WAYLAND_DISPLAY available.
 - `wayland.nix` in home-manager only provides `wayland.systemd.target` option (default: graphical-session.target) for other HM services to reference; it doesn't manage the target itself.
 
+**DMS in Niri regression investigation** (2026-02-06):
+- User-reported LKG: `2a90da865856928750429dc83ca363030d90c33d`, first known-bad: `4dbd4ca303a84bc1b28e6da36666881733e15931`.
+- Symptom: `dms.service` crash loops in Niri with `Failed to create wl_display (No such file or directory)` / Qt Wayland platform init failure.
+- Key intent: stop guessing; need systematic instrumentation to determine (a) who/what triggers `dms.service` (target vs D-Bus), (b) what `WAYLAND_DISPLAY` systemd user manager and `dms.service` see at start, and (c) ordering relative to `niri.service` readiness.
+- Note: prior “spawn-at-startup env import” attempts were inconclusive; must verify whether they run and whether they modify the systemd user manager env.
+
+Resolution chosen:
+- Root cause localized by history inspection: commit `cb36531` removed `spawn-at-startup "dms" "run" "--session"` from `home/niri-config.kdl`, switching DMS startup to a systemd user unit tied to `graphical-session.target`. This introduced a startup ordering/env fragility (DMS could crash early and hit StartLimit, or start before Wayland env is stable).
+- Fix: disable DMS systemd autostart and start DMS explicitly from within each compositor session (niri `spawn-at-startup`, Hyprland `exec-once`).
+
 **Open questions**:
 - Wallpaper rotation setup? (old config had feh timer)
 - TrueNAS syncoid target configuration

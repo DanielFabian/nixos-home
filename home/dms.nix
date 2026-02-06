@@ -17,11 +17,9 @@
   programs.dank-material-shell = {
     enable = true;
 
-    # Systemd service for auto-start
-    systemd = {
-      enable = true;
-      restartIfChanged = true;
-    };
+    # Autostart DMS from the compositor (niri/hyprland) to avoid Wayland/env races.
+    # This keeps DMS deterministic and matches the last known-good behavior.
+    systemd.enable = false;
 
     # Core features
     enableSystemMonitoring = true; # System monitoring widgets

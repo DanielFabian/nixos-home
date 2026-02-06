@@ -186,6 +186,7 @@
       # Startup - DMS starts via systemd graphical-session.target
       exec-once = [
         "gnome-keyring-daemon --start --components=secrets,pkcs11"
+        "dms run --session"
       ];
     };
   };
