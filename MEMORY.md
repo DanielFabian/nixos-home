@@ -77,6 +77,13 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for layering model discussion.
    ```
 7. (Phase 2) Secure Boot with Lanzaboote
 
+**Systemd session integration** (2026-02-06 research):
+- Hyprland: home-manager module creates `hyprland-session.target` (BindsTo=graphical-session.target). Environment import + target start happen via a single `exec-once` line in hyprland.conf: `dbus-update-activation-environment --systemd <vars> && systemctl --user stop/start hyprland-session.target`. Env vars (DISPLAY, WAYLAND_DISPLAY, HYPRLAND_INSTANCE_SIGNATURE, XDG_CURRENT_DESKTOP) are pushed BEFORE the target starts.
+- Niri: NO home-manager WM module exists. Niri ships its own `niri.service` (Type=notify, BindsTo=graphical-session.target, Before=graphical-session.target) and `niri-shutdown.target`. The `niri --session` binary does env import synchronously in Rust (systemctl import-environment + dbus-update-activation-environment for WAYLAND_DISPLAY/DISPLAY/XDG_CURRENT_DESKTOP/XDG_SESSION_TYPE/NIRI_SOCKET) BEFORE calling sd_notify(Ready), which triggers niri.service→active→graphical-session.target.
+- `niri-session` script (used by greetd) also does a blanket `systemctl --user import-environment` + `dbus-update-activation-environment --all` before starting niri.service.
+- Both compositors guarantee WAYLAND_DISPLAY is in systemd env before graphical-session.target activates. Services WantedBy=graphical-session.target (like DMS) will have WAYLAND_DISPLAY available.
+- `wayland.nix` in home-manager only provides `wayland.systemd.target` option (default: graphical-session.target) for other HM services to reference; it doesn't manage the target itself.
+
 **Open questions**:
 - Wallpaper rotation setup? (old config had feh timer)
 - TrueNAS syncoid target configuration
