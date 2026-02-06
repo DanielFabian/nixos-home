@@ -39,7 +39,9 @@
   # Qt follows GTK
   qt = {
     enable = true;
-    platformTheme.name = "gtk";
+    # Wayland-safe: avoid the legacy gtk2 platform theme plugin, which
+    # expects an X11 DISPLAY and can break under compositors without Xwayland.
+    platformTheme.name = "adwaita";
     style.name = "adwaita-dark";
   };
 }
