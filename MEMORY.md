@@ -55,6 +55,10 @@ Key invariant: ZFS snapshots as first-class rollback for _everything_ (system st
 - hyprland available as alternative session
 - Plasma/Cosmic disabled (not needed for portal infrastructure anymore)
 
+**Greeter update (2026-02-06)**:
+
+- Switched to COSMIC greeter via `services.displayManager.cosmic-greeter.enable = true` in `modules/desktop/greeter.nix`.
+
 **Portal bug FIXED**: Home-manager's hyprland module was overwriting `NIX_XDG_DESKTOP_PORTAL_DIR` to point at user profile (empty). Fix: `portalPackage = null` in home-manager hyprland config.
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for layering model discussion.
@@ -118,6 +122,64 @@ Resolution chosen:
 
 - Prefer Wayland-safe theming: switch `qt.platformTheme.name` from `gtk` (maps to `gtk2`) to `adwaita` so Qt apps don’t depend on X11/Xwayland.
 
+**Hyprland crash under greeter (2026-02-06)**:
+
+- Hyprland repeatedly segfaults during greeter-launched startup/shutdown; coredump shows a SEGV in Hyprland’s `eglLog` during `eglDestroyContext`, called from Aquamarine’s `CDRMRenderer` destructor.
+- Practical interpretation: Hyprland exits early due to an EGL/DRM failure, then crashes while cleaning up EGL (so the “crash” seen in the greeter is a hard coredump, not a normal compositor exit).
+- Strong correlation with hybrid GPU device selection:
+  - NVIDIA is `/dev/dri/card0` (pci 01:00.0), Intel is `/dev/dri/card1` (pci 00:02.0).
+  - Niri logs show it selects `/dev/dri/card1` as the primary DRM node and works.
+  - Both `/dev/dri/card0` and `/dev/dri/card1` are tagged `master-of-seat` by udev, so a compositor that “picks the first master-of-seat” is likely to grab NVIDIA card0.
+- Additional likely contributing constraint: system-wide session env sets `GBM_BACKEND=nvidia-drm` and `__GLX_VENDOR_LIBRARY_NAME=nvidia` (in `modules/firmware/nvidia.nix`), while Hyprland’s crash stack shows it is using Mesa EGL (`libEGL_mesa.so.0`) rather than an NVIDIA EGL implementation.
+- Current working hypothesis: Hyprland/Aquamarine picks NVIDIA card0, but its Mesa EGL path + global GBM/GLX env leads to EGL errors; Hyprland exits and then hits the Aquamarine EGL teardown segfault.
+- Fix direction to validate next: ensure only Intel is treated as the primary/master-of-seat KMS device for the seat, and/or scope NVIDIA-specific env vars to offload-only execution (not globally for the compositor).
+
+**Hyprland from COSMIC greeter (2026-02-06)**:
+
+- Hyprland now starts successfully from COSMIC greeter.
+- Key discovery: COSMIC greeter enumerates sessions from `/run/current-system/sw/share/wayland-sessions` (system profile), so we must ensure the relevant `.desktop` entries are in the system closure and that `/share/wayland-sessions` is linked into the system profile.
+- Implementation approach: add a custom `hyprland-direct.desktop` session entry that runs a small wrapper which logs startup output and then launches Hyprland via `start-hyprland --no-nixgl --`.
+- Rationale: Hyprland recommends `start-hyprland` (watchdog + proper startup); on Nix builds it may try to use `nixGL`, which is undesirable/unavailable in the greeter environment. `--no-nixgl` keeps it stable.
+
+Quick glossary:
+
+- `nixGL`: a wrapper (from the nixGL project) that runs a program with the host’s GPU driver libraries available (typically by injecting the right GL/Vulkan libs into the runtime environment). It’s most relevant on non-NixOS systems or constrained environments where a Nix-built binary can’t find the system’s GL stack.
+- Why it mattered here: Hyprland’s `start-hyprland` can try to exec `nixGL`; under greetd the PATH is minimal, so that exec can fail unless we either provide nixGL in PATH or pass `--no-nixgl`.
+- Important: `--no-nixgl` does not mean “no GPU”. It just prevents `start-hyprland` from using an extra wrapper to inject driver libraries; on NixOS the normal (GPU-accelerated) driver stack is already available via the system closure/kernel modules.
+- Decision: keep the custom greeter session wrapper (`hyprland-direct`) for explicit control and per-launch logging; do not attempt to make `nixGL` available in the greeter environment.
+
+**Implementation (2026-02-06)**:
+
+- Chose “Option A”: removed global `GBM_BACKEND=nvidia-drm`, `__GLX_VENDOR_LIBRARY_NAME=nvidia`, and `WLR_NO_HARDWARE_CURSORS=1` from `environment.sessionVariables`.
+- Added a dedicated `nvidia-offload-wayland` wrapper to opt into those variables only when explicitly launching an app on the dGPU.
+
+**Greeter session enumeration issue (2026-02-06)**:
+
+- COSMIC greeter was unable to read `/run/current-system/sw/share/wayland-sessions` (directory absent), so it likely couldn’t reliably offer/launch Hyprland or niri via `.desktop` session entries.
+- Fix: set `services.displayManager.sessionPackages` to include `pkgs.niri` and `config.programs.hyprland.package` so the greeter has session files to enumerate.
+
+Refined understanding:
+
+- Even with those packages present in the system closure (binaries available), `/run/current-system/sw/share/wayland-sessions` can remain missing.
+- Root cause: `environment.pathsToLink` does not link `"/share/wayland-sessions"` by default; it must be added explicitly for greeters that scan `/run/current-system/sw/share/wayland-sessions`.
+
+Clarification:
+
+- `services.displayManager.sessionPackages` builds a separate “desktops” derivation (`config.services.displayManager.sessionData.desktops`) and is exposed to some DMs via `XDG_DATA_DIRS`; it does not necessarily place files into `/run/current-system/sw/share/wayland-sessions`.
+- Because COSMIC greeter scans `/run/current-system/sw/share/wayland-sessions`, custom sessions must be included in the system profile (e.g. added to `environment.systemPackages`) _and_ the subdir must be linked via `environment.pathsToLink`.
+
+**Hyprland session not starting from greeter (2026-02-06)**:
+
+- The upstream Hyprland `hyprland.desktop` uses `Exec=.../bin/start-hyprland`.
+- `start-hyprland` appears to try to exec `nixGL` (string: “Hyprland was compiled with Nix - will use nixGL”) via `execvp`; under greetd/cosmic-greeter the PATH is restricted and likely lacks `nixGL`, so Hyprland can exit immediately without a coredump.
+- Workaround: provide a custom session `.desktop` entry that runs `${config.programs.hyprland.package}/bin/Hyprland` directly.
+
+Constraints discovered:
+
+- Any package listed in `services.displayManager.sessionPackages` must set `passthru.providedSessions` or evaluation fails.
+- Overriding `hyprland.desktop` by installing the same path is fragile because Hyprland’s package also provides that filename; depending on link order, `/run/current-system/sw/share/wayland-sessions/hyprland.desktop` may still resolve to the upstream `start-hyprland` entry.
+- Robust approach: ship a distinct `hyprland-direct.desktop` (session name `hyprland-direct`) and select “Hyprland (direct)” in the greeter.
+
 **Open questions**:
 
 - Wallpaper rotation setup? (old config had feh timer)
@@ -164,6 +226,11 @@ User preference: keep cache artifacts editor/rg-friendly (avoid single-line mega
 Maintenance note: the MCP server implementation uses the SDK's high-level `McpServer.registerTool` API (the lower-level `Server` is deprecated).
 
 Validation: confirmed via stdio client that `listTools` works and each tool returns structured JSON (e.g. `ok` for built caches and `missing_cache` for absent caches).
+
+**MCP runtime constraint (2026-02-06)**:
+
+- `tools/nixos-mcp/` requires Node.js `>=20` (`package.json` engines). Node was missing on the host; installed via Home Manager (`pkgs.unstable.nodejs_22`).
+- Dependencies installed with `npm --prefix tools/nixos-mcp ci` and caches built via `npm --prefix tools/nixos-mcp run -s build-caches`.
 
 Philosophy: Give the AI real tools instead of making it hallucinate option names.
 
