@@ -2,8 +2,8 @@
 // Docs: https://github.com/YaLTeR/niri/wiki/Configuration
 // This file is symlinked - edit directly and reload niri (Mod+Shift+Q or niri msg reload)
 
-// DMS (DankMaterialShell) starts via systemd graphical-session.target
-// nm-applet also starts via systemd (if enabled)
+// Import WAYLAND_DISPLAY etc. into systemd so services like DMS can find the compositor
+spawn-at-startup "sh" "-c" "systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP && systemctl --user restart graphical-session.target"
 
 prefer-no-csd
 
