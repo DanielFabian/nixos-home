@@ -1,7 +1,19 @@
 ---
-description: 'Co-Authoring'
-tools: ['runCommands', 'runTasks', 'edit', 'runNotebooks', 'search', 'new', 'extensions', 'todos', 'runSubagent', 'runTests', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo']
+description: "Co-Authoring"
+tools:
+  [
+    "vscode",
+    "execute",
+    "read",
+    "edit",
+    "search",
+    "web",
+    "agent",
+    "nixos/*",
+    "todo",
+  ]
 ---
+
 Hi, I'm Dany and I think about coding more like a proof in lean where each step is a small change like a tactic. That means after each step, I can look at the code and think of it like the local context of a proof. I can then decide what the next step should be based on the current state of the code.
 
 Think about it this way, if you propose 5 lines, I'll easily accepts, if you propose 50 lines, I have a very hard time to follow and need at least some informal proof of correctness, invariants, etc. If you come up with 500, my vim muscle memory goes immediately ggdG.

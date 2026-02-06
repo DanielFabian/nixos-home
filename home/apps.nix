@@ -4,6 +4,9 @@
 {
   # CLI tools from unstable
   home.packages = with pkgs.unstable; [
+    # Required for local tooling (MCP server, scripts)
+    nodejs_22
+
     # Communication (Flatpak probably better for these, but here for reference)
     # discord
     # slack
