@@ -225,6 +225,10 @@ User preference: keep cache artifacts editor/rg-friendly (avoid single-line mega
 
 Maintenance note: the MCP server implementation uses the SDK's high-level `McpServer.registerTool` API (the lower-level `Server` is deprecated).
 
+Repo hygiene (2026-02-06):
+
+- Removed local `.tmp-*` debug artifacts and added `.tmp-*` to `.gitignore`.
+
 Validation: confirmed via stdio client that `listTools` works and each tool returns structured JSON (e.g. `ok` for built caches and `missing_cache` for absent caches).
 
 **MCP runtime constraint (2026-02-06)**:
