@@ -92,6 +92,14 @@ nix --experimental-features "nix-command flakes" run github:nix-community/disko 
 
 echo "    Disk partitioned and formatted."
 
+# Activate swap immediately — the NixOS installer runs /nix/store in tmpfs,
+# which overflows on 8GB RAM machines. Swap gives tmpfs room to spill.
+SWAP_PART=$(lsblk -lnp -o NAME,FSTYPE "$DISK_DEVICE" | awk '$2 == "swap" {print $1; exit}')
+if [[ -n "$SWAP_PART" ]]; then
+  echo "    Activating swap ($SWAP_PART) to prevent installer OOM..."
+  swapon "$SWAP_PART"
+fi
+
 # --- Step 2: Generate hardware-configuration.nix ---
 
 echo ""
