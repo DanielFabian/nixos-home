@@ -71,20 +71,12 @@
     {
       nixosConfigurations = {
         zbook = nixpkgs.lib.nixosSystem {
-          # system inferred from hardware-configuration.nix (nixpkgs.hostPlatform)
           specialArgs = { inherit inputs; };
           modules = [
-            # Declarative disk layout
             disko.nixosModules.disko
             ./disko/zbook.nix
-
-            # Secure boot
             lanzaboote.nixosModules.lanzaboote
-
-            # Declarative flatpak
             nix-flatpak.nixosModules.nix-flatpak
-
-            # Home manager
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -92,15 +84,33 @@
               home-manager.extraSpecialArgs = { inherit inputs; };
               home-manager.users.dany = import ./home;
             }
-
-            # Overlays + unfree (NVIDIA driver)
             {
               nixpkgs.overlays = [ unstableOverlay ];
               nixpkgs.config.allowUnfree = true;
             }
-
-            # Machine config
             ./hosts/zbook
+          ];
+        };
+
+        x1carbon = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            disko.nixosModules.disko
+            ./disko/x1carbon.nix
+            lanzaboote.nixosModules.lanzaboote
+            nix-flatpak.nixosModules.nix-flatpak
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.users.dany = import ./home;
+            }
+            {
+              nixpkgs.overlays = [ unstableOverlay ];
+              nixpkgs.config.allowUnfree = true;
+            }
+            ./hosts/x1carbon
           ];
         };
       };

@@ -31,8 +31,6 @@
       "nvme"
       "usb_storage"
       "sd_mod"
-      # ZFS
-      "zfs"
       # TPM2
       "tpm_crb"
       "tpm_tis"
@@ -49,10 +47,6 @@
     systemd.tpm2.enable = true;
   };
 
-  # Kernel - use default stable LTS (ZFS compatible)
-  # If ZFS breaks with default kernel, pin explicitly:
+  # Kernel - use default stable LTS
   # boot.kernelPackages = pkgs.linuxPackages_6_6;
-
-  # ZFS kernel module
-  boot.supportedFilesystems = [ "zfs" ];
 }
