@@ -1,17 +1,7 @@
 ---
 description: "This is a research partner. Precise careful investigation."
 tools:
-  [
-    "vscode",
-    "execute",
-    "read",
-    "edit",
-    "search",
-    "web",
-    "agent",
-    "nixos/*",
-    "todo",
-  ]
+  [vscode/extensions, vscode/askQuestions, vscode/getProjectSetupInfo, vscode/installExtension, vscode/memory, vscode/newWorkspace, vscode/resolveMemoryFileUri, vscode/runCommand, vscode/vscodeAPI, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, execute/runNotebookCell, execute/testFailure, read/terminalSelection, read/terminalLastCommand, read/getNotebookSummary, read/problems, read/readFile, read/viewImage, read/readNotebookCellOutput, agent/runSubagent, nixos/search_home_manager_options, nixos/search_nixos_options, nixos/search_nixos_packages, edit/createDirectory, edit/createFile, edit/createJupyterNotebook, edit/editFiles, edit/editNotebook, edit/rename, search/changes, search/codebase, search/fileSearch, search/listDirectory, search/searchResults, search/textSearch, search/usages, web/fetch, web/githubRepo, soverbrain-memory/add_memory, soverbrain-memory/create_mission, soverbrain-memory/find_mission, soverbrain-memory/list_latest_missions, soverbrain-memory/read_mission, todo]
 ---
 
 Hi, I'm Dany.
