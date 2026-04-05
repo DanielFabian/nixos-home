@@ -185,6 +185,17 @@ Constraints discovered:
 - Wallpaper rotation setup? (old config had feh timer)
 - TrueNAS syncoid target configuration
 
+**X1 Carbon install semantics (2026-04-05)**:
+
+- Corrected a bad model: `nixos-install` does **not** build into the live ISO `/nix/store`. Its own script/manpage show it builds into the target store via `--store "$mountPoint"`, i.e. `/mnt/nix/store`.
+- Therefore the right checks are: ensure `/mnt/nix` is actually mounted on disk, keep `TMPDIR` on `/mnt`, and cap build parallelism on the 8GB laptop (`--max-jobs 1 --cores 1`). Overlaying the live `/nix/store` was solving the wrong problem.
+- Best workflow on weak hardware is now two-stage:
+  1. `scripts/install.sh <host> --prepare-only` on the laptop: Disko, swap, generate real hardware-config.
+  2. Build the exact `nixosConfigurations.<host>` closure on a stronger machine using that generated hardware-config.
+  3. From the laptop installer, `nix copy --from ssh://<builder> --to /mnt /nix/store/<hash>-nixos-system-...`.
+  4. Finish with `scripts/install.sh <host> --system /nix/store/<hash>-nixos-system-...`.
+- Rationale: this avoids expensive laptop evaluation/builds and makes the install path explicit about which store is being populated.
+
 ### Dev Environment Tooling
 
 **Devcontainer**: Ubuntu 24.04 + Nix feature, full `nixos-rebuild --dry-run` capability. Includes nil LSP + nixfmt.

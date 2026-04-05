@@ -8,14 +8,12 @@
 
 {
   # CLI tools from unstable
-  home.packages =
-    with pkgs.unstable;
-    [
-      # Required for local tooling (MCP server, scripts)
-      nodejs_22
+  home.packages = with pkgs.unstable; [
+    # Required for local tooling (MCP server, scripts)
+    nodejs_22
 
-      # Media
-      mpv
+    # Media
+    mpv
 
     # File management
     yazi
