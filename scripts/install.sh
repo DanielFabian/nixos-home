@@ -100,6 +100,21 @@ if [[ -n "$SWAP_PART" ]]; then
   swapon "$SWAP_PART"
 fi
 
+# Extend the installer's /nix/store onto the real disk via overlay.
+# The installer's store lives in tmpfs (RAM-backed). On 8GB machines the
+# full system closure (~20GB+) won't fit. An overlay mount keeps existing
+# installer packages visible (lower layer) while writing new downloads to
+# the target btrfs (upper layer). This gives us ~250GB of effective store.
+echo "    Extending /nix/store onto target disk (overlay)..."
+mkdir -p /mnt/.nix-overlay/upper /mnt/.nix-overlay/work
+mount -t overlay overlay \
+  -o "lowerdir=/nix/store,upperdir=/mnt/.nix-overlay/upper,workdir=/mnt/.nix-overlay/work" \
+  /nix/store
+
+# Also move build temporaries off tmpfs
+export TMPDIR=/mnt/.install-tmp
+mkdir -p "$TMPDIR"
+
 # --- Step 2: Generate hardware-configuration.nix ---
 
 echo ""
@@ -117,6 +132,11 @@ echo ">>> Step 3/4: Installing NixOS (this takes a while)..."
 nixos-install --flake "$REPO_DIR#$HOST" --no-root-passwd
 
 echo "    NixOS installed."
+
+# Clean up overlay and temp dirs
+echo "    Cleaning up installer overlay..."
+umount /nix/store 2>/dev/null || true
+rm -rf /mnt/.nix-overlay /mnt/.install-tmp
 
 # --- Step 4: Secure boot keys ---
 
