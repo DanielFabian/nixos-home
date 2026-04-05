@@ -16,13 +16,17 @@ let
 
         # Electron runtime deps
         glib
+        gtk3
+        atk
         nspr
         nss
         dbus
         at-spi2-atk
+        at-spi2-core
         cups
         expat
         libxkbcommon
+        libxkbfile
         xorg.libX11
         libxcb
         xorg.libXcomposite
@@ -35,6 +39,10 @@ let
         alsa-lib
         libgbm
         udev
+        libudev0-shim
+        systemd
+        libdbusmenu
+        lttng-ust
 
         # Extension runtime deps
         curl
