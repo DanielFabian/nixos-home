@@ -21,6 +21,7 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PREPARE_ONLY=0
 PREBUILT_SYSTEM=""
+LOGIN_USER="dany"
 
 usage() {
   cat <<EOF
@@ -239,6 +240,11 @@ else
 fi
 
 echo "    NixOS installed."
+
+echo ""
+echo ">>> Setting login password for $LOGIN_USER..."
+echo "    You need a password to get past the greeter."
+nixos-enter --root /mnt -c "passwd $LOGIN_USER"
 
 # Clean up temp dirs
 rm -rf /mnt/.install-tmp

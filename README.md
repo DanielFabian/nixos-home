@@ -23,10 +23,12 @@ cd /tmp/config
 # 2. Run the one-shot installer
 sudo ./scripts/install.sh x1carbon
 
-# 3. Reboot
+# 3. Set the login password when prompted
+
+# 4. Reboot
 ```
 
-`install.sh` handles Disko, swap activation, hardware-config generation, and `nixos-install`.
+`install.sh` handles Disko, swap activation, hardware-config generation, `nixos-install`, and prompts to set the login password for `dany` before reboot.
 
 ### Low-RAM path (prepare on laptop, build on stronger machine)
 
@@ -60,6 +62,7 @@ sudo ./scripts/install.sh x1carbon --system /nix/store/<hash>-nixos-system-x1car
 ```
 
 `--system` is the non-destructive second phase: it assumes the disk is already partitioned and mounted at `/mnt`, and goes straight to `nixos-install` using the prebuilt closure.
+It will still prompt to set the login password for `dany` before reboot.
 
 ## Post-Install: Secure Boot
 
