@@ -12,27 +12,54 @@
 
 ## Bootstrap (from NixOS 25.11 installer)
 
+### Normal path
+
 ```bash
 # 1. Get this repo
 nix-shell -p git
 git clone https://github.com/youruser/nixos-home /tmp/config
-cd /tmp/config/firmware-os
+cd /tmp/config
 
-# 2. Verify disk device (adjust disko/zbook.nix if needed)
-lsblk
+# 2. Run the one-shot installer
+sudo ./scripts/install.sh x1carbon
 
-# 3. Partition and mount
-sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko ./disko/zbook.nix
-
-# 4. Generate hardware config
-sudo nixos-generate-config --no-filesystems --root /mnt
-cp /mnt/etc/nixos/hardware-configuration.nix ./hosts/zbook/
-
-# 5. Install
-sudo nixos-install --flake .#zbook
-
-# 6. Reboot, then enable secure boot (see docs/secure-boot.md)
+# 3. Reboot
 ```
+
+`install.sh` handles Disko, swap activation, hardware-config generation, and `nixos-install`.
+
+### Low-RAM path (prepare on laptop, build on stronger machine)
+
+For 8GB machines like the X1 Carbon, use a two-stage install so the laptop does not need to evaluate/build the full closure locally.
+
+On the laptop installer:
+
+```bash
+sudo ./scripts/install.sh x1carbon --prepare-only
+```
+
+This partitions the disk, enables swap, mounts the target filesystem, and generates `hosts/x1carbon/hardware-configuration.nix`.
+
+Copy that generated hardware config back to your stronger builder machine, then build the exact system closure there:
+
+```bash
+system=$(nix build .#nixosConfigurations.x1carbon.config.system.build.toplevel --print-out-paths --no-link)
+echo "$system"
+```
+
+Then push that closure into the laptop's target store. Current example while the installer is at `root@10.0.82.23`:
+
+```bash
+nix copy --no-check-sigs --to 'ssh-ng://root@10.0.82.23?remote-store=/mnt' "$system"
+```
+
+Back on the laptop installer, finish using that printed store path:
+
+```bash
+sudo ./scripts/install.sh x1carbon --system /nix/store/<hash>-nixos-system-x1carbon-...
+```
+
+`--system` is the non-destructive second phase: it assumes the disk is already partitioned and mounted at `/mnt`, and goes straight to `nixos-install` using the prebuilt closure.
 
 ## Post-Install: Secure Boot
 

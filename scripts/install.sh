@@ -35,6 +35,38 @@ Modes:
 EOF
 }
 
+maybe_activate_swap() {
+  local swap_part
+  swap_part=$(lsblk -lnp -o NAME,FSTYPE "$DISK_DEVICE" | awk '$2 == "swap" {print $1; exit}')
+  if [[ -z "$swap_part" ]]; then
+    return 0
+  fi
+
+  if swapon --show=NAME --noheadings 2>/dev/null | grep -qx "$swap_part"; then
+    echo "    Swap already active ($swap_part)."
+  else
+    echo "    Activating swap ($swap_part)..."
+    swapon "$swap_part"
+  fi
+}
+
+verify_target_store_mount() {
+  if ! findmnt -M /mnt/nix >/dev/null; then
+    echo "Error: /mnt/nix is not mounted on the target filesystem." >&2
+    echo "If this is a fresh install, run without --system or with --prepare-only first." >&2
+    findmnt /mnt >&2 || true
+    exit 1
+  fi
+
+  echo "    Target store is mounted on disk:"
+  findmnt /mnt/nix
+}
+
+prepare_tmpdir() {
+  export TMPDIR=/mnt/.install-tmp
+  mkdir -p "$TMPDIR"
+}
+
 # --- Validation ---
 
 if [[ $EUID -ne 0 ]]; then
@@ -59,6 +91,11 @@ while [[ $# -gt 0 ]]; do
       shift
       ;;
     --system|--closure|--store-path)
+      if [[ $# -lt 2 ]]; then
+        echo "Error: $1 requires a store path argument" >&2
+        usage >&2
+        exit 1
+      fi
       PREBUILT_SYSTEM="$2"
       shift 2
       ;;
@@ -130,66 +167,37 @@ else
   echo "Mode:  build from flake"
 fi
 echo ""
-
-# --- Confirm disk operation ---
-
-# Extract device path from disko config for display
 DISK_DEVICE=$(grep -oP 'device\s*=\s*"\K[^"]+' "$REPO_DIR/disko/$HOST.nix" | head -1)
 echo "Target disk: $DISK_DEVICE"
-echo ""
-echo "WARNING: This will ERASE ALL DATA on $DISK_DEVICE"
-echo ""
-read -rp "Type 'yes' to continue: " confirm
-if [[ "$confirm" != "yes" ]]; then
-  echo "Aborted."
-  exit 1
-fi
 
-# --- Step 1: Partition + format via Disko ---
+if [[ -z "$PREBUILT_SYSTEM" ]]; then
+  echo ""
+  echo "WARNING: This will ERASE ALL DATA on $DISK_DEVICE"
+  echo ""
+  read -rp "Type 'yes' to continue: " confirm
+  if [[ "$confirm" != "yes" ]]; then
+    echo "Aborted."
+    exit 1
+  fi
 
-echo ""
-echo ">>> Step 1/4: Partitioning and formatting ($DISK_DEVICE)..."
-nix --experimental-features "nix-command flakes" run github:nix-community/disko -- \
-  --mode disko "$REPO_DIR/disko/$HOST.nix"
+  echo ""
+  echo ">>> Step 1/4: Partitioning and formatting ($DISK_DEVICE)..."
+  nix --experimental-features "nix-command flakes" run github:nix-community/disko -- \
+    --mode disko "$REPO_DIR/disko/$HOST.nix"
 
-echo "    Disk partitioned and formatted."
+  echo "    Disk partitioned and formatted."
+  maybe_activate_swap
+  verify_target_store_mount
+  prepare_tmpdir
 
-# Activate swap immediately — the NixOS installer runs /nix/store in tmpfs,
-# which overflows on 8GB RAM machines. Swap gives tmpfs room to spill.
-SWAP_PART=$(lsblk -lnp -o NAME,FSTYPE "$DISK_DEVICE" | awk '$2 == "swap" {print $1; exit}')
-if [[ -n "$SWAP_PART" ]]; then
-  echo "    Activating swap ($SWAP_PART) to prevent installer OOM..."
-  swapon "$SWAP_PART"
-fi
+  echo ""
+  echo ">>> Step 2/4: Generating hardware configuration..."
+  nixos-generate-config --no-filesystems --root /mnt
 
-# nixos-install already builds into /mnt/nix/store, not the live ISO store.
-# Verify the target nix store is actually mounted on disk, then put temp files
-# on the target filesystem as well.
-if ! findmnt -M /mnt/nix >/dev/null; then
-  echo "Error: /mnt/nix is not mounted on the target filesystem." >&2
-  echo "Disko should have mounted the @nix subvolume there." >&2
-  findmnt /mnt >&2 || true
-  exit 1
-fi
+  cp /mnt/etc/nixos/hardware-configuration.nix "$REPO_DIR/hosts/$HOST/hardware-configuration.nix"
+  echo "    Hardware config written to hosts/$HOST/hardware-configuration.nix"
 
-echo "    Target store is mounted on disk:"
-findmnt /mnt/nix
-
-# Move build temporaries off tmpfs as well.
-export TMPDIR=/mnt/.install-tmp
-mkdir -p "$TMPDIR"
-
-# --- Step 2: Generate hardware-configuration.nix ---
-
-echo ""
-echo ">>> Step 2/4: Generating hardware configuration..."
-nixos-generate-config --no-filesystems --root /mnt
-
-# Copy generated config into the repo
-cp /mnt/etc/nixos/hardware-configuration.nix "$REPO_DIR/hosts/$HOST/hardware-configuration.nix"
-echo "    Hardware config written to hosts/$HOST/hardware-configuration.nix"
-
-if [[ $PREPARE_ONLY -eq 1 ]]; then
+  if [[ $PREPARE_ONLY -eq 1 ]]; then
   cat <<EOF
 
 === Prepare stage complete ===
@@ -200,18 +208,30 @@ To offload the heavy build to another machine:
   1. Copy hosts/$HOST/hardware-configuration.nix back to your builder machine.
   2. Build the exact closure there:
        nix build .#nixosConfigurations.$HOST.config.system.build.toplevel --print-out-paths --no-link
-  3. From the installer machine, copy that closure directly into /mnt:
-       nix copy --from ssh://<builder> --to /mnt /nix/store/<hash>-nixos-system-$HOST-...
+  3. From the builder machine, push that closure into this installer's target store:
+      nix copy --no-check-sigs --to 'ssh-ng://root@<installer-ip>?remote-store=/mnt' /nix/store/<hash>-nixos-system-$HOST-...
   4. Then run:
        sudo ./scripts/install.sh $HOST --system /nix/store/<hash>-nixos-system-$HOST-...
 EOF
-  exit 0
+    exit 0
+  fi
+else
+  echo ""
+  echo ">>> Using existing prepared target filesystem..."
+  maybe_activate_swap
+  verify_target_store_mount
+  prepare_tmpdir
+
+  if [[ ! -e "/mnt$PREBUILT_SYSTEM" ]]; then
+    echo "Error: prebuilt closure not found in target store: $PREBUILT_SYSTEM" >&2
+    echo "Push it first with:" >&2
+    echo "  nix copy --no-check-sigs --to 'ssh-ng://root@<installer-ip>?remote-store=/mnt' $PREBUILT_SYSTEM" >&2
+    exit 1
+  fi
 fi
 
-# --- Step 3: Install NixOS ---
-
 echo ""
-echo ">>> Step 3/4: Installing NixOS (this takes a while)..."
+echo ">>> Installing NixOS (this takes a while)..."
 if [[ -n "$PREBUILT_SYSTEM" ]]; then
   nixos-install --system "$PREBUILT_SYSTEM" --root /mnt --no-root-passwd
 else

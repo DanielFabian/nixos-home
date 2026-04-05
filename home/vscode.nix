@@ -24,7 +24,7 @@ let
         expat
         libxkbcommon
         xorg.libX11
-        xorg.libxcb
+        libxcb
         xorg.libXcomposite
         xorg.libXdamage
         xorg.libXext
