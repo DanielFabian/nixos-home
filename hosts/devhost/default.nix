@@ -86,6 +86,12 @@
     tmux
   ];
 
+  # nix-ld: provides a dynamic loader at /lib64/ld-linux-x86-64.so.2 so
+  # prebuilt glibc binaries run unmodified. Required for VS Code Remote-SSH
+  # (which drops a prebuilt node server into ~/.vscode-server) and for
+  # devcontainer tooling that bootstraps non-Nix binaries.
+  programs.nix-ld.enable = true;
+
   # SSH - the whole point of the machine.
   services.openssh = {
     enable = true;
