@@ -163,6 +163,7 @@
     path = with pkgs; [
       openssh
       coreutils
+      util-linux # runuser
     ];
     script = ''
       set -eu
@@ -170,7 +171,7 @@
       KEY=$SSHDIR/id_ed25519
       install -d -o dany -g users -m 0700 "$SSHDIR"
       if [ ! -f "$KEY" ]; then
-        sudo -u dany ssh-keygen -t ed25519 -f "$KEY" -N "" -C "dany@devhost"
+        runuser -u dany -- ssh-keygen -t ed25519 -f "$KEY" -N "" -C "dany@devhost"
       fi
       {
         echo ""
