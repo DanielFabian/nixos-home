@@ -43,6 +43,12 @@
 
     # Hyprland - track their flake for freshness
     hyprland.url = "github:hyprwm/Hyprland";
+
+    # VM image generation (Hyper-V VHDX for devhost)
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -57,6 +63,7 @@
       dms,
       dgop,
       hyprland,
+      nixos-generators,
       ...
     }@inputs:
     let
@@ -113,6 +120,50 @@
             ./hosts/x1carbon
           ];
         };
+
+        # Headless dev-container host for Hyper-V. Deliberately minimal:
+        # no desktop, no home-manager, no flatpak. Just sshd + docker + nix.
+        # The VHDX image is built via packages.<system>.devhost-image below.
+        devhost = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [ ./hosts/devhost ];
+        };
+      };
+
+      # `nix build .#devhost-image` produces a Hyper-V VHDX ready to import.
+      # Requires a builder with /dev/kvm (the hyperv format runs a real VM
+      # to assemble the disk). Build on x1carbon/zbook, not in WSL/container.
+      #   New-VM -Generation 2 -VHDPath <path>\nixos.vhdx -Name devhost
+      #   New-VHD -Path <path>\workspace.vhdx -Dynamic -SizeBytes 200GB
+      #   Add-VMHardDiskDrive -VMName devhost -Path <path>\workspace.vhdx
+      packages.x86_64-linux.devhost-image = nixos-generators.nixosGenerate {
+        system = "x86_64-linux";
+        format = "hyperv";
+        specialArgs = { inherit inputs; };
+        modules = [ ./hosts/devhost ];
+      };
+
+      # `nix build .#devhost-iso` produces a bootable installer ISO.
+      # No KVM required — builds fine in WSL/containers. Workflow:
+      #   New-VM -Generation 2 -Name devhost -MemoryStartupBytes 8GB
+      #   Set-VMFirmware -VMName devhost -EnableSecureBoot Off
+      #   New-VHD -Path os.vhdx       -Dynamic -SizeBytes 64GB
+      #   New-VHD -Path workspace.vhdx -Dynamic -SizeBytes 200GB
+      #   Add-VMHardDiskDrive -VMName devhost -Path os.vhdx
+      #   Add-VMHardDiskDrive -VMName devhost -Path workspace.vhdx
+      #   Add-VMDvdDrive      -VMName devhost -Path devhost.iso
+      #   Start-VM devhost
+      # The ISO auto-partitions /dev/sda with GPT+ESP+ext4, runs
+      # `nixos-install --flake github:DanielFabian/nixos-home#devhost`,
+      # reboots. First boot then formats /dev/sdb as label=workspace and
+      # prints dany's freshly generated SSH pubkey to the MOTD.
+      packages.x86_64-linux.devhost-iso = nixos-generators.nixosGenerate {
+        system = "x86_64-linux";
+        format = "install-iso";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/devhost/installer.nix
+        ];
       };
     };
 }
