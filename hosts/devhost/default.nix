@@ -93,6 +93,9 @@
       PasswordAuthentication = false;
       PermitRootLogin = "no";
       KbdInteractiveAuthentication = false;
+      # Print /etc/motd on login so the freshly-generated pubkey is visible
+      # without the user having to know to `cat /etc/motd`.
+      PrintMotd = true;
     };
   };
 
