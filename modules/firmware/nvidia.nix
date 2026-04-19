@@ -44,12 +44,37 @@
   environment.sessionVariables = {
     # Hint electron/chromium apps to use Wayland
     NIXOS_OZONE_WL = "1";
-    
-    # NVIDIA-specific Wayland tweaks
-    GBM_BACKEND = "nvidia-drm";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    
-    # Cursor fix for Hyprland + NVIDIA
-    WLR_NO_HARDWARE_CURSORS = "1";
   };
+
+  # IMPORTANT:
+  # Don't export NVIDIA-specific GBM/GLX vars globally.
+  # On hybrid laptops we want the compositor (Hyprland/niri) to run on Intel by default.
+  # Forcing `GBM_BACKEND=nvidia-drm` and `__GLX_VENDOR_LIBRARY_NAME=nvidia` globally can
+  # break Mesa/Intel EGL paths and lead to compositor startup/teardown crashes.
+  environment.systemPackages = with pkgs; [
+    (writeShellScriptBin "nvidia-offload-wayland" ''
+      #!/usr/bin/env bash
+      set -euo pipefail
+
+      # Start with NixOS-provided PRIME offload env.
+      # (available because `hardware.nvidia.prime.offload.enableOffloadCmd = true`)
+      if command -v nvidia-offload >/dev/null 2>&1; then
+        exec nvidia-offload \
+          env \
+            GBM_BACKEND=nvidia-drm \
+            __GLX_VENDOR_LIBRARY_NAME=nvidia \
+            WLR_NO_HARDWARE_CURSORS=1 \
+            "$@"
+      fi
+
+      exec env \
+        __NV_PRIME_RENDER_OFFLOAD=1 \
+        __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0 \
+        __GLX_VENDOR_LIBRARY_NAME=nvidia \
+        __VK_LAYER_NV_optimus=NVIDIA_only \
+        GBM_BACKEND=nvidia-drm \
+        WLR_NO_HARDWARE_CURSORS=1 \
+        "$@"
+    '')
+  ];
 }

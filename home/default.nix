@@ -17,6 +17,7 @@
     ./niri.nix
     ./dms.nix # DankMaterialShell for niri
     ./apps.nix
+    ./vscode.nix # Mutable VS Code (self-updating, FHS-wrapped)
   ];
 
   home.username = "dany";

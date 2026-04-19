@@ -1,19 +1,22 @@
 # Rolling apps - from unstable or Flatpak
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # CLI tools from unstable
   home.packages = with pkgs.unstable; [
-    # Communication (Flatpak probably better for these, but here for reference)
-    # discord
-    # slack
+    # Required for local tooling (MCP server, scripts)
+    nodejs_22
 
     # Media
-    # spotify  # use flatpak
     mpv
 
     # File management
-    yazi # terminal file manager (modern ranger/vifm)
+    yazi
 
     # System monitoring
     btop
@@ -24,24 +27,12 @@
     httpie
 
     # Docker/container tools
-    dive # explore docker images
+    dive
     lazydocker
 
-    # Cloud CLI tools
-    # azure-cli  # use devcontainer for cloud stuff
-
     # Misc
-    neofetch
     fastfetch
   ];
-
-  # VS Code from unstable - sees docker, native Wayland, fast updates
-  programs.vscode = {
-    enable = true;
-    package = pkgs.unstable.vscode;
-    # Extensions managed by VS Code itself (not Nix)
-    # mutableExtensionsDir = true; # default
-  };
 
   # Default applications (for xdg-open, portals, etc.)
   xdg.mimeApps = {

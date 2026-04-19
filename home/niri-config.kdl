@@ -2,8 +2,9 @@
 // Docs: https://github.com/YaLTeR/niri/wiki/Configuration
 // This file is symlinked - edit directly and reload niri (Mod+Shift+Q or niri msg reload)
 
-// DMS (DankMaterialShell) starts via systemd graphical-session.target
-// nm-applet also starts via systemd (if enabled)
+// Startup programs
+spawn-at-startup "dms" "run" "--session" // DankMaterialShell (panel, notifications, launcher)
+spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets,pkcs11"
 
 prefer-no-csd
 

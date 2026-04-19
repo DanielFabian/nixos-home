@@ -1,7 +1,10 @@
-# ZFS configuration
+# ZFS configuration (zbook-specific: 32GB RAM)
 { config, pkgs, ... }:
 
 {
+  boot.supportedFilesystems = [ "zfs" ];
+  boot.initrd.availableKernelModules = [ "zfs" ];
+
   # ZFS services
   services.zfs = {
     autoScrub = {
@@ -17,6 +20,6 @@
   # ZFS arc size - with 32GB RAM, we can be generous
   # But let's not go crazy - leave room for apps
   boot.kernelParams = [
-    "zfs.zfs_arc_max=${toString (8 * 1024 * 1024 * 1024)}"  # 8GB max ARC
+    "zfs.zfs_arc_max=${toString (8 * 1024 * 1024 * 1024)}" # 8GB max ARC
   ];
 }
