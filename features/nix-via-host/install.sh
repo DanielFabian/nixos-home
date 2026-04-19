@@ -58,6 +58,22 @@ export NIX_REMOTE=daemon
 # NIX_PATH for legacy nix-shell / <nixpkgs>. Points at the host's actual
 # nixpkgs source so store paths match the host bit-for-bit.
 export NIX_PATH="nixpkgs=$HOST_NIXPKGS"
+
+# Flake registry fix-up. The /etc/nix/registry.json written at image-build
+# time points at \$HOST_NIXPKGS, which may itself be a symlink on the host.
+# nix flake resolution dislikes symlink targets in "type=path" entries. So
+# at shell start we regenerate a user-local registry pointing at the fully
+# resolved realpath. User-local registry takes precedence over /etc/nix.
+if [ -d "$HOST_NIXPKGS" ]; then
+  _nixpkgs_real=\$(readlink -f "$HOST_NIXPKGS" 2>/dev/null || echo "$HOST_NIXPKGS")
+  if [ -n "\$_nixpkgs_real" ] && [ -d "\$_nixpkgs_real" ]; then
+    mkdir -p "\$HOME/.config/nix"
+    cat > "\$HOME/.config/nix/registry.json" <<REG
+{"version":2,"flakes":[{"from":{"type":"indirect","id":"nixpkgs"},"to":{"type":"path","path":"\$_nixpkgs_real"},"exact":true}]}
+REG
+  fi
+  unset _nixpkgs_real
+fi
 EOF
 chmod 0644 /etc/profile.d/10-nix-via-host.sh
 
