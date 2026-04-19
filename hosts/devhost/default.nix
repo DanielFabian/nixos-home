@@ -16,6 +16,7 @@
   imports = [
     ./hardware-configuration.nix
     ./wipe.nix
+    ./nix-share.nix
     ../../modules/firmware/docker.nix
   ];
 
