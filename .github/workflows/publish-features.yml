@@ -1,0 +1,31 @@
+name: Publish DevContainer Features
+
+# Publishes features/* to ghcr.io/<owner>/<repo>/<feature>:<version>.
+# Triggered manually or on push to master that touches features/.
+# The devcontainers/action wraps `devcontainer features publish`.
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "features/**"
+      - ".github/workflows/publish-features.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish Features
+        uses: devcontainers/action@v1
+        with:
+          publish-features: "true"
+          base-path-to-features: "./features"
+          generate-docs: "false"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
