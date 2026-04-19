@@ -1,6 +1,6 @@
 {
   "id": "nix-via-host",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": "Nix via Host Daemon",
   "description": "Use the host's Nix daemon and /nix/store from inside a devcontainer. Zero download; every container on the same host shares one store. Designed for a devhost-style Hyper-V / remote NixOS machine that SSH-hosts your devcontainers.",
   "documentationURL": "https://github.com/DanielFabian/nixos-home/tree/master/features/nix-via-host",
@@ -14,6 +14,11 @@
       "type": "string",
       "default": "/nix/devhost-sw-bin",
       "description": "Path inside the container where the host's nix + pre-installed tools appear. Prepended to PATH. The default matches the symlink created by this repo's hosts/devhost/nix-share.nix."
+    },
+    "hostNixpkgs": {
+      "type": "string",
+      "default": "/nix/devhost-nixpkgs",
+      "description": "Path inside the container where the host's nixpkgs flake source appears. Used for both NIX_PATH (legacy `<nixpkgs>`) and the flake registry (`nixpkgs#foo`)."
     }
   },
   "mounts": [

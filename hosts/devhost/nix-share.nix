@@ -24,13 +24,21 @@
     nix-direnv
   ];
 
-  # Stable, container-reachable path to the system's sw/bin. Refreshed on
-  # every nixos-rebuild switch via activation scripts. Long-running containers
-  # keep pointing at the old store path until they reopen PATH entries; that's
-  # fine — store paths are immutable and not GC'd while referenced.
+  # Stable, container-reachable paths. Refreshed on every nixos-rebuild
+  # switch via activation scripts. Long-running containers keep pointing at
+  # the old store paths until they reopen PATH entries; that's fine — store
+  # paths are immutable and not GC'd while referenced.
+  #
+  # /nix/devhost-sw-bin → the system's sw/bin (host's systemPackages).
+  # /nix/devhost-nixpkgs → the nixpkgs source flake this system was built
+  #   from. Containers reference it via NIX_PATH + flake registry so that
+  #   `nix-shell -p ripgrep` and `nix run nixpkgs#ripgrep` resolve to the
+  #   EXACT same derivation the host would build — instant cache hit, zero
+  #   duplication.
   system.activationScripts.devhostContainerTools = {
     text = ''
       ln -sfn ${config.system.path}/bin /nix/devhost-sw-bin
+      ln -sfn ${pkgs.path} /nix/devhost-nixpkgs
     '';
     deps = [ ];
   };
@@ -42,7 +50,8 @@
 
     nix-via-host devcontainer Feature:
       bind-mount /nix into your container (the Feature does this)
-      PATH includes /nix/devhost-sw-bin (populated by this host's systemPackages)
+      PATH includes /nix/devhost-sw-bin (host's systemPackages)
+      NIX_PATH pinned to /nix/devhost-nixpkgs (host's nixpkgs)
       NIX_REMOTE=daemon routes nix commands to this host's daemon
   '';
 }

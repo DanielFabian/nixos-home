@@ -8,8 +8,9 @@ set -euo pipefail
 
 ENABLE_DIRENV="${ENABLEDIRENV:-true}"
 HOST_NIX_BIN_DIR="${HOSTNIXBINDIR:-/nix/devhost-sw-bin}"
+HOST_NIXPKGS="${HOSTNIXPKGS:-/nix/devhost-nixpkgs}"
 
-echo "nix-via-host: enableDirenv=$ENABLE_DIRENV hostNixBinDir=$HOST_NIX_BIN_DIR"
+echo "nix-via-host: enableDirenv=$ENABLE_DIRENV hostNixBinDir=$HOST_NIX_BIN_DIR hostNixpkgs=$HOST_NIXPKGS"
 
 # /etc/nix/nix.conf tells the nix client to talk to the daemon instead of
 # trying to build locally. Experimental features match what you'd want for
@@ -19,6 +20,24 @@ cat > /etc/nix/nix.conf <<EOF
 experimental-features = nix-command flakes
 # Route all store operations through the host's daemon via the mounted socket.
 store = daemon
+EOF
+
+# /etc/nix/registry.json — pin the `nixpkgs` flake reference to the host's
+# actual nixpkgs source. Without this, `nix run nixpkgs#ripgrep` would use
+# the upstream default registry (github:NixOS/nixpkgs/nixpkgs-unstable) —
+# which might work but wouldn't share derivations with the host. Pinning to
+# the host path gives us perfect store-path parity.
+cat > /etc/nix/registry.json <<EOF
+{
+  "version": 2,
+  "flakes": [
+    {
+      "from": { "type": "indirect", "id": "nixpkgs" },
+      "to":   { "type": "path",     "path": "$HOST_NIXPKGS" },
+      "exact": true
+    }
+  ]
+}
 EOF
 
 # /etc/profile.d is sourced by login shells. Most devcontainer terminals are
@@ -36,6 +55,9 @@ case ":\$PATH:" in
   *) export PATH="$HOST_NIX_BIN_DIR:\$PATH" ;;
 esac
 export NIX_REMOTE=daemon
+# NIX_PATH for legacy nix-shell / <nixpkgs>. Points at the host's actual
+# nixpkgs source so store paths match the host bit-for-bit.
+export NIX_PATH="nixpkgs=$HOST_NIXPKGS"
 EOF
 chmod 0644 /etc/profile.d/10-nix-via-host.sh
 
