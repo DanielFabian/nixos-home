@@ -38,7 +38,12 @@
   system.activationScripts.devhostContainerTools = {
     text = ''
       ln -sfn ${config.system.path}/bin /nix/devhost-sw-bin
-      ln -sfn ${pkgs.path} /nix/devhost-nixpkgs
+      # pkgs.path can itself be a symlink (lazy-trees / flake indirection).
+      # The flake registry refuses a "type=path" pointing at a symlink, so
+      # we resolve the chain here and point /nix/devhost-nixpkgs directly
+      # at the underlying real directory.
+      nixpkgs_real=$(readlink -f ${pkgs.path})
+      ln -sfn "$nixpkgs_real" /nix/devhost-nixpkgs
     '';
     deps = [ ];
   };
