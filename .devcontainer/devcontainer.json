@@ -34,5 +34,8 @@
         }
     },
     "postCreateCommand": ".devcontainer/post-create.sh",
-    "remoteUser": "vscode"
+    "remoteUser": "vscode",
+    "mounts": [
+        "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,readonly"
+    ]
 }
