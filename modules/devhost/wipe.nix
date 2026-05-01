@@ -1,12 +1,41 @@
 # `devhost-wipe` — shared ceremony for resetting the host.
 #
-# Imported by both hosts/devhost/default.nix (installed system) and
-# hosts/devhost/installer.nix (live installer ISO), so the same command
-# is available in both environments.
-{ pkgs, ... }:
-
+# Imported by both the installed cattle layer (modules/devhost/default.nix)
+# and the installer environment (modules/devhost/installer.nix), so the same
+# command is available in both. The disks are parameterized via
+# `devhost.osDisk` / `devhost.workspaceDevice` so the same module works on
+# Hyper-V (sd*) and Apple Virtualization (vd*).
 {
-  environment.systemPackages = [
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+let
+  cfg = config.devhost;
+in
+{
+  options.devhost = {
+    osDisk = lib.mkOption {
+      type = lib.types.str;
+      default = "/dev/sda";
+      description = ''
+        Block device that holds the OS image. Hyper-V Gen2 presents disks as
+        /dev/sd*; Apple Virtualization presents virtio-blk as /dev/vd*.
+      '';
+    };
+    workspaceDevice = lib.mkOption {
+      type = lib.types.str;
+      default = "/dev/sdb";
+      description = ''
+        Second block device used as the /home workspace disk. Formatted on
+        first boot by devhost-init-workspace.service iff it has no signature.
+      '';
+    };
+  };
+
+  config.environment.systemPackages = [
     (pkgs.writeShellApplication {
       name = "devhost-wipe";
       runtimeInputs = with pkgs; [
@@ -22,8 +51,8 @@
         # and reboot is the explicit final act.
         #
         # Scope:
-        #   (default)    wipe OS disk only (/dev/sda). /home on /dev/sdb survives.
-        #   --workspace  additionally wipe /dev/sdb (workspace) — you lose clones.
+        #   (default)    wipe OS disk only (${cfg.osDisk}). /home survives.
+        #   --workspace  additionally wipe ${cfg.workspaceDevice} — you lose clones.
         #   --no-reboot  do the wipe but don't reboot. For testing.
 
         wipe_workspace=0
@@ -49,11 +78,11 @@
         fi
 
         echo "devhost-wipe: this will make the VM unbootable until re-installed."
-        echo "devhost-wipe: OS disk  = /dev/sda (WILL be wiped)"
+        echo "devhost-wipe: OS disk  = ${cfg.osDisk} (WILL be wiped)"
         if [[ $wipe_workspace -eq 1 ]]; then
-          echo "devhost-wipe: /home    = /dev/sdb (WILL be wiped)"
+          echo "devhost-wipe: /home    = ${cfg.workspaceDevice} (WILL be wiped)"
         else
-          echo "devhost-wipe: /home    = /dev/sdb (preserved)"
+          echo "devhost-wipe: /home    = ${cfg.workspaceDevice} (preserved)"
         fi
         read -r -p "Type 'wipe' to proceed: " confirm
         if [[ "$confirm" != "wipe" ]]; then
@@ -61,14 +90,14 @@
           exit 1
         fi
 
-        echo "devhost-wipe: clearing /dev/sda signatures"
-        wipefs --all --force /dev/sda || true
-        dd if=/dev/zero of=/dev/sda bs=1M count=1 conv=notrunc 2>/dev/null || true
+        echo "devhost-wipe: clearing ${cfg.osDisk} signatures"
+        wipefs --all --force ${cfg.osDisk} || true
+        dd if=/dev/zero of=${cfg.osDisk} bs=1M count=1 conv=notrunc 2>/dev/null || true
 
         if [[ $wipe_workspace -eq 1 ]]; then
-          echo "devhost-wipe: clearing /dev/sdb signatures"
-          wipefs --all --force /dev/sdb || true
-          dd if=/dev/zero of=/dev/sdb bs=1M count=1 conv=notrunc 2>/dev/null || true
+          echo "devhost-wipe: clearing ${cfg.workspaceDevice} signatures"
+          wipefs --all --force ${cfg.workspaceDevice} || true
+          dd if=/dev/zero of=${cfg.workspaceDevice} bs=1M count=1 conv=notrunc 2>/dev/null || true
         fi
 
         sync
